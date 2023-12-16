@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "notion telegram bot"
+version = "0.0.1"
+description = ""
+authors = ["Nikita Shagalov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^3.2.0"
+python-dotenv = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
