@@ -6,8 +6,7 @@ from logging import getLogger
 from aiogram.client.session import aiohttp
 from aiohttp import ClientResponse
 from pydantic import BaseModel
-from src import config
-from src.utils import statuses
+from src.utils import statuses, config
 from src.utils.request_methods import RequestMethods
 from src.utils.exceptions.request import AuthException
 
@@ -107,6 +106,8 @@ class RequestHandler(IRequestHandler):
                 res = await self.delete(url, *args, **kwargs)
                 return res
 
+        raise ValueError(f"Method should be in: {self._available_methods}")
+
     async def get(self, url: str) -> ResponseModel:
         """"""
         input_url = url
@@ -125,7 +126,7 @@ class RequestHandler(IRequestHandler):
                                                                     url=input_url)
         return result
 
-    async def post(self, url: str, body: dict = None, data: dict = None) -> ResponseModel:
+    async def post(self, url: str, body: dict | None = None, data: dict | None = None) -> ResponseModel:
         """"""
         input_url = url
         url = f"{self.host}/{url}"
@@ -145,7 +146,7 @@ class RequestHandler(IRequestHandler):
                                                                     data=data)
         return result
 
-    async def patch(self, url: str, body: dict = None, data: dict = None) -> ResponseModel:
+    async def patch(self, url: str, body: dict | None = None, data: dict | None = None) -> ResponseModel:
         """"""
         input_url = url
         url = f"{self.host}/{url}"
@@ -165,7 +166,7 @@ class RequestHandler(IRequestHandler):
                                                                     data=data)
         return result
 
-    async def delete(self, url: str, body: dict = None, data: dict = None) -> ResponseModel:
+    async def delete(self, url: str, body: dict | None = None, data: dict | None = None) -> ResponseModel:
         input_url = url
         url = f"{self.host}/{url}"
 

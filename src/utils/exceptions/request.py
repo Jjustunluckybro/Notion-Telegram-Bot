@@ -31,4 +31,4 @@ class ResponseValidationException(RequestException):
                  body: Any,
                  *args, **kwargs) -> None:
         exception_msg = f"{request_type}/ invalid response {url}, unexpected body: {body}"
-        super().__init__(status=status, msg=exception_msg, *args, *kwargs)
+        super().__init__(status, exception_msg, *args, *kwargs)
