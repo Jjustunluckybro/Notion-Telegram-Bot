@@ -22,3 +22,6 @@ def get_env_var(var_name: str) -> str:
 
 
 BOT_TOKEN: Final[str] = get_env_var("BOT_TOKEN")
+BACKEND_HOST: Final[str] = get_env_var("BACKEND_HOST")
+BACKEND_USER_LOGIN: Final[str] = get_env_var("BACKEND_USER_LOGIN")
+BACKEND_USER_PASSWORD: Final[str] = get_env_var("BACKEND_USER_PASSWORD")
