@@ -1,6 +1,6 @@
 import os
 
-from typing import Final, Any
+from typing import Final
 from dotenv import load_dotenv
 
 from .exceptions.configurate_exceptions import EnvDependNotFound
