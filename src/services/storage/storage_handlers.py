@@ -63,6 +63,8 @@ class UserStorageHandler(IStorageRequestHandler):
             case statuses.VALIDATION_ERROR_422:
                 self.logger.error(f"Storage not supported model - {response.body}")
                 raise StorageValidationError()
+            case _:
+                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
 
     async def update_username(self, user_id: str, new_username: str) -> None:
         """
