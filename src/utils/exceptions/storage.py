@@ -9,3 +9,11 @@ class UnacceptableResponseStatusCode(StorageException):
 
 class StorageNotFound(StorageException):
     ...
+
+
+class StorageValidationError(StorageException):
+    ...
+
+
+class StorageDuplicate(StorageException):
+    ...
