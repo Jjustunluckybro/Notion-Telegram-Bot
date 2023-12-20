@@ -1,25 +1,11 @@
-from abc import ABC
-from logging import getLogger
-
-from src.utils import statuses
 from src.models.user_model import UserModel
-from src.services.requests.RequestHandler import get_request_handler, RequestHandler, ResponseModel
+from src.services.storage.interfaces import IUserStorageHandler
+from src.utils import statuses
 from src.utils.exceptions.storage import StorageNotFound, StorageException, UnacceptableResponseStatusCode, \
     StorageValidationError, StorageDuplicate
 
 
-class IStorageRequestHandler(ABC):
-    request_handler: RequestHandler
-
-    def __init__(self) -> None:
-        self.request_handler = get_request_handler()
-
-
-class UserStorageHandler(IStorageRequestHandler):
-
-    def __init__(self):
-        self.logger = getLogger(f"{__name__}.users")
-        super().__init__()
+class UserStorageHandler(IUserStorageHandler):
 
     async def get(self, user_id: str) -> UserModel:
         """
