@@ -15,5 +15,9 @@ class StorageValidationError(StorageException):
     ...
 
 
+class StorageInvalidId(StorageValidationError):
+    ...
+
+
 class StorageDuplicate(StorageException):
     ...
