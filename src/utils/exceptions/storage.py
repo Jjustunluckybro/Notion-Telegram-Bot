@@ -3,7 +3,7 @@ class StorageException(ValueError):
     ...
 
 
-class UnacceptableResponseStatusCode(StorageException):
+class UnexpectedResponse(StorageException):
     ...
 
 

@@ -167,7 +167,12 @@ class IAlarmsStoragehandler(IStorageRequestHandler, ABC):
         ...
 
     @abstractmethod
-    async def create(self, alarm: AlarmModelToCreate) -> str:
+    async def get_all_ready(self) -> list[AlarmModel]:
+        """Return all alarms with 'READY' status"""
+        ...
+
+    @abstractmethod
+    async def create(self, alarm: AlarmModelToCreate, next_notion_time: datetime, repeat_interval: int) -> str:
         """Create new alarm in storage"""
         ...
 

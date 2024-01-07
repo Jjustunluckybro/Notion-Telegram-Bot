@@ -5,7 +5,7 @@ from pydantic import ValidationError, TypeAdapter
 from src.models.notes_models import NoteModelToCreate, NoteModel
 from src.services.storage.interfaces import INotesStoragehandler
 from src.utils import statuses
-from src.utils.exceptions.storage import StorageValidationError, StorageNotFound, UnacceptableResponseStatusCode
+from src.utils.exceptions.storage import StorageValidationError, StorageNotFound, UnexpectedResponse
 
 
 class NotesStoragehandler(INotesStoragehandler):
@@ -25,7 +25,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 self.logger.info(f"Storage not found note with id: {_id}")
                 raise StorageNotFound(f"Storage not found note with id: {_id}")
             case _:
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def get_all_by_theme(self, _id: str) -> list[NoteModel]:
         """"""
@@ -45,7 +45,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageNotFound(f"Storage not found note relates to theme with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def get_all_by_user(self, _id: str) -> list[NoteModel]:
         """"""
@@ -65,7 +65,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageNotFound(f"Storage not found note relates to user with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def create(self, note: NoteModelToCreate) -> str:
         """"""
@@ -81,7 +81,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageValidationError(f"Request body doesn't match validation: {response.body}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def patch(self, _id: str, new_data: dict[str, Any]) -> None:
         """"""
@@ -103,7 +103,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageNotFound(f"Storage not found note with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def delete(self, _id: str) -> None:
         """"""
@@ -121,7 +121,7 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageValidationError(f"{response.body} with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def delete_by_theme(self, _id: str) -> None:
         """"""
@@ -136,4 +136,4 @@ class NotesStoragehandler(INotesStoragehandler):
                 raise StorageNotFound(f"Storage not found notes related to theme or theme with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")

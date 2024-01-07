@@ -1,7 +1,7 @@
 from src.models.user_model import UserModel
 from src.services.storage.interfaces import IUserStorageHandler
 from src.utils import statuses
-from src.utils.exceptions.storage import StorageNotFound, StorageException, UnacceptableResponseStatusCode, \
+from src.utils.exceptions.storage import StorageNotFound, StorageException, UnexpectedResponse, \
     StorageValidationError, StorageDuplicate
 
 
@@ -13,7 +13,7 @@ class UserStorageHandler(IUserStorageHandler):
         :param user_id:
         :return: UserModel
         :raise StorageNotFound if no user found in storage
-        :raise UnacceptableResponseStatusCode if response has Unacceptable status code
+        :raise UnexpectedResponse if response has Unacceptable status code
         """
         response = await self.request_handler.get(f"users/get_user/{user_id}")
 
@@ -24,7 +24,7 @@ class UserStorageHandler(IUserStorageHandler):
                 self.logger.info(f"Storage not found user with id: {user_id}")
                 raise StorageNotFound(f"Storage not found user with id: {user_id}")
             case _:
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def create(self, user: UserModel) -> str:
         """
@@ -50,7 +50,7 @@ class UserStorageHandler(IUserStorageHandler):
                 self.logger.error(f"Storage not supported model - {response.body}")
                 raise StorageValidationError()
             case _:
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def update_username(self, user_id: str, new_username: str) -> None:
         """
@@ -76,7 +76,7 @@ class UserStorageHandler(IUserStorageHandler):
         :param user_id:
         :return:
         :raise StorageNotFound if no user found in storage
-        :raise UnacceptableResponseStatusCode if response has Unacceptable status code
+        :raise UnexpectedResponse if response has Unacceptable status code
         """
         response = await self.request_handler.delete(f"users/delete_user/{user_id}")
 
@@ -88,7 +88,7 @@ class UserStorageHandler(IUserStorageHandler):
                 self.logger.info(f"Storage not found user with id: {user_id}")
                 raise StorageNotFound(f"Storage not found user with id: {user_id}")
             case _:
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
 
 def get_user_storage_handler() -> UserStorageHandler:

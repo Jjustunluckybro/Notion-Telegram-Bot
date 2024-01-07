@@ -5,7 +5,7 @@ from pydantic import ValidationError, TypeAdapter
 from src.models.themes_modles import ThemeModelToCreate, ThemeModel
 from src.services.storage.interfaces import IThemesStorageHandler
 from src.utils import statuses
-from src.utils.exceptions.storage import StorageValidationError, UnacceptableResponseStatusCode, StorageNotFound
+from src.utils.exceptions.storage import StorageValidationError, UnexpectedResponse, StorageNotFound
 
 
 class ThemesStorageHandler(IThemesStorageHandler):
@@ -19,7 +19,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
         :return: ThemeModel
         :raise: ValidationError - Can't validate response answer to ThemeModel
         :raise: StorageNotFound -Theme with this id not found
-        :raise: UnacceptableResponseStatusCode
+        :raise: UnexpectedResponse
         """
         response = await self.request_handler.get(f"themes/get_theme/{_id}")
 
@@ -34,7 +34,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 self.logger.info(f"Storage not found theme with id: {_id}")
                 raise StorageNotFound(f"Storage not found theme with id: {_id}")
             case _:
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def get_all_by_user(self, _id: str) -> list[ThemeModel]:
         """
@@ -58,7 +58,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 raise StorageNotFound(f"Storage not found theme relates to user with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def create(self, theme: ThemeModelToCreate) -> str:
         """"""
@@ -73,7 +73,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 raise StorageValidationError(f"Request body doesn't match validation: {response.body}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def patch(self, _id: str, new_data: dict[str, Any]) -> None:
         """"""
@@ -95,7 +95,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 raise StorageNotFound(f"Storage not found theme with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def delete(self, _id: str) -> None:
         """"""
@@ -113,7 +113,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 raise StorageValidationError(f"{response.body} with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
     async def delete_all_by_user(self, _id: str) -> None:
         """"""
@@ -128,4 +128,4 @@ class ThemesStorageHandler(IThemesStorageHandler):
                 raise StorageNotFound(f"Storage not found themes or user with id: {_id}")
             case _:
                 self.logger.error(f"Unacceptable response status code: {response.status}")
-                raise UnacceptableResponseStatusCode(f"Unacceptable response status code: {response.status}")
+                raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
