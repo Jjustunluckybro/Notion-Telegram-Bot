@@ -58,7 +58,7 @@ class RequestHandler(IRequestHandler):
         details: str = await r.text()
         return ResponseModel(body=details, status=status)
 
-    async def get_auth_header(self) -> dict:
+    def get_auth_header(self) -> dict:
         return {"Authorization": f"bearer {self._token}"}
 
     async def auth(self) -> None:
@@ -132,7 +132,7 @@ class RequestHandler(IRequestHandler):
         url = f"{self.host}/{url}"
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=body, data=data) as r:
+            async with session.post(url, json=body, data=data, headers=self.get_auth_header()) as r:
                 self._logger.info(f"POST/ send request - url: {url}")
                 response = await self.parce_response(r)
                 self._logger.info(
@@ -142,7 +142,7 @@ class RequestHandler(IRequestHandler):
         result = await self.check_response_auth_and_try_new_request(response=response,
                                                                     method=self._available_methods.POST,
                                                                     url=input_url,
-                                                                    json=body,
+                                                                    body=body,
                                                                     data=data)
         return result
 
@@ -152,7 +152,7 @@ class RequestHandler(IRequestHandler):
         url = f"{self.host}/{url}"
 
         async with aiohttp.ClientSession() as session:
-            async with session.patch(url, json=body) as r:
+            async with session.patch(url, json=body, headers=self.get_auth_header()) as r:
                 self._logger.info(f"PATCH/ send request - url: {url}")
                 response = await self.parce_response(r)
                 self._logger.info(
@@ -162,7 +162,7 @@ class RequestHandler(IRequestHandler):
         result = await self.check_response_auth_and_try_new_request(response=response,
                                                                     method=self._available_methods.PATCH,
                                                                     url=input_url,
-                                                                    json=body,
+                                                                    body=body,
                                                                     data=data)
         return result
 
@@ -171,7 +171,7 @@ class RequestHandler(IRequestHandler):
         url = f"{self.host}/{url}"
 
         async with aiohttp.ClientSession() as session:
-            async with session.delete(url, json=body) as r:
+            async with session.delete(url, json=body, headers=self.get_auth_header()) as r:
                 self._logger.info(f"DELETE/ send request - url: {url}")
                 response = await self.parce_response(r)
                 self._logger.info(
@@ -181,7 +181,7 @@ class RequestHandler(IRequestHandler):
         result = await self.check_response_auth_and_try_new_request(response=response,
                                                                     method=self._available_methods.DELETE,
                                                                     url=input_url,
-                                                                    json=body,
+                                                                    body=body,
                                                                     data=data)
         return result
 
