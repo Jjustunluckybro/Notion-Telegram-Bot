@@ -4,7 +4,7 @@ from typing import Any, List
 
 from pydantic import ValidationError, TypeAdapter
 
-from src.models.alarm_model import AlarmStatus, AlarmModelToCreate, AlarmModel
+from src.models.alarm_model import AlarmStatus, AlarmModelToCreate, AlarmModel, AlarmLinkModel
 from src.services.storage.interfaces import IAlarmsStoragehandler
 from src.utils import statuses
 from src.utils.exceptions.storage import StorageValidationError, StorageNotFound, UnexpectedResponse
@@ -68,7 +68,7 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
 
     async def get_all_ready(self) -> list[AlarmModel]:
         response = await self.request_handler.get("alarms/get_all_ready_alarms")
-
+        print(response.body)
         match response.status:
             case statuses.SUCCESS_200:
                 ta = TypeAdapter(List[AlarmModel])  # Need to validate list of pydantic models
@@ -84,15 +84,19 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
                 self.logger.error(f"Unacceptable response status code: {response.status}")
                 raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
-    async def create(self, alarm: AlarmModelToCreate, next_notion_time: datetime, repeat_interval: int) -> str:
+    async def create(self, alarm: AlarmModelToCreate, next_notion_time: datetime, repeat_interval: int | None = None) -> str:
         """
         :param alarm:
         :param next_notion_time:
         :param repeat_interval:
         :return:
         """
+        if repeat_interval is not None:
+            request_str = f"alarms/create_alarm?next_notion_time={next_notion_time}&repeat_interval={repeat_interval}"
+        else:
+            request_str = f"alarms/create_alarm?next_notion_time={next_notion_time}"
         response = await self.request_handler.post(
-            f"alarms/create_alarm?next_notion_time={next_notion_time}&repeat_interval={repeat_interval}",
+            request_str,
             body=alarm.model_dump()
         )
 

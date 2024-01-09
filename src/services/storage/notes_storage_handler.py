@@ -13,7 +13,6 @@ class NotesStoragehandler(INotesStoragehandler):
         """"""
 
         response = await self.request_handler.get(f"notes/get_note/{_id}")
-
         match response.status:
             case statuses.SUCCESS_200:
                 try:

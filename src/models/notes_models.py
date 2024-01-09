@@ -25,7 +25,7 @@ class NoteDataModel(BaseModel):
     """Models with some additional business data that the note has"""
     text: str
     attachments: list[str, ] | None
-    checkpoints: list[CheckpointModel, ] | None
+    check_points: list[CheckpointModel, ] | None
 
 
 class NoteModel(BaseModel):

@@ -40,7 +40,7 @@ class UserStorageHandler(IUserStorageHandler):
         )
 
         match response.status:
-            case statuses.SUCCESS_200:
+            case statuses.CREATED_201:
                 self.logger.info(f"Create user in storage with id: {response.body}")
                 return response.body
             case statuses.CONFLICT_409:
@@ -73,8 +73,6 @@ class UserStorageHandler(IUserStorageHandler):
     async def delete(self, user_id: str) -> None:
         """
         Delete user from storage
-        :param user_id:
-        :return:
         :raise StorageNotFound if no user found in storage
         :raise UnexpectedResponse if response has Unacceptable status code
         """

@@ -22,12 +22,12 @@ class AlarmTimesModel(BaseModel):
     creation_time: datetime
     next_notion_time: datetime
     end_time: datetime | None
-    repeat_interval: int
+    repeat_interval: int | None
 
 
 class AlarmModel(BaseModel):
     """Represent Alarm. Store in the backend db with same model"""
-    _id: str = Field(alias="_id")
+    id: str = Field(alias="_id")
     name: str
     description: str | None
     is_repeatable: bool
