@@ -68,7 +68,6 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
 
     async def get_all_ready(self) -> list[AlarmModel]:
         response = await self.request_handler.get("alarms/get_all_ready_alarms")
-        print(response.body)
         match response.status:
             case statuses.SUCCESS_200:
                 ta = TypeAdapter(List[AlarmModel])  # Need to validate list of pydantic models
