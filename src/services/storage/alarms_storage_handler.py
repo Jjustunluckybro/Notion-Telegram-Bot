@@ -36,7 +36,7 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
             case statuses.SUCCESS_200:
                 ta = TypeAdapter(List[AlarmModel])  # Need to validate list of pydantic models
                 try:
-                    return ta.validate_python(response.status)
+                    return ta.validate_json(response.body)
                 except ValidationError as err:
                     self.logger.error(f"StorageValidationError: {str(err)}")
                     raise StorageValidationError(str(err))
@@ -55,7 +55,7 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
             case statuses.SUCCESS_200:
                 ta = TypeAdapter(List[AlarmModel])  # Need to validate list of pydantic models
                 try:
-                    return ta.validate_python(response.status)
+                    return ta.validate_json(response.body)
                 except ValidationError as err:
                     self.logger.error(f"StorageValidationError: {str(err)}")
                     raise StorageValidationError(str(err))
@@ -73,7 +73,7 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
             case statuses.SUCCESS_200:
                 ta = TypeAdapter(List[AlarmModel])  # Need to validate list of pydantic models
                 try:
-                    return ta.validate_python(response.status)
+                    return ta.validate_json(response.body)
                 except ValidationError as err:
                     self.logger.error(f"StorageValidationError: {str(err)}")
                     raise StorageValidationError(str(err))

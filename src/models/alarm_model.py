@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AlarmStatus(str, Enum):
@@ -27,7 +27,7 @@ class AlarmTimesModel(BaseModel):
 
 class AlarmModel(BaseModel):
     """Represent Alarm. Store in the backend db with same model"""
-    _id: str
+    _id: str = Field(alias="_id")
     name: str
     description: str | None
     is_repeatable: bool
