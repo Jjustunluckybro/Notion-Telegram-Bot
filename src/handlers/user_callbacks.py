@@ -1,4 +1,4 @@
-from aiogram import types
+from aiogram import types, Router
 
 from src.services.storage.alarms_storage_handler import AlarmsStoragehandler
 from src.services.storage.interfaces import IThemesStorageHandler, INotesStoragehandler, IAlarmsStoragehandler
@@ -35,14 +35,17 @@ async def open_all_themes(callback: types.CallbackQuery, sh: IThemesStorageHandl
 @handel_storage_unexpected_response
 async def open_all_theme_notes(callback: types.CallbackQuery, sh: INotesStoragehandler = NotesStoragehandler()) -> None:
     """
+    Open all theme notes as inline keyboard. Create keys to create or delete note + return to theme list
     :param callback:
-    :param sh: Dependency
+    :param sh: Dependency to interact with storage
     """
     theme_notes = None
     theme_id = Callbacks.get_id_from_callback(callback.data)
+    text = "Список ваших заметок под темой:"
 
     try:
         theme_notes = await sh.get_all_by_theme(theme_id)
+
     except StorageNotFound:
         ...
     finally:
@@ -79,3 +82,18 @@ async def open_all_note_alarms(callback: types.CallbackQuery,
             chat_id=callback.from_user.id
         )
         await callback.message.delete()
+
+
+def register_main_menu_callbacks_router(callbacks: Callbacks = Callbacks()) -> Router:
+    """
+    Register all callback handlers to use main menu
+    :callbacks: Dependency
+    :return: routers with registered handlers
+    """
+    router = Router(name="main_menu_callbacks_router")
+
+    router.callback_query.register(open_all_themes, lambda x: x.data == callbacks.open_all_themes)
+    router.callback_query.register(open_all_theme_notes, lambda x: x.data.startswith(callbacks.open_theme_start_with))
+    router.callback_query.register(open_all_note_alarms, lambda x: x.data.startswith(callbacks.open_note_start_with))
+
+    return router

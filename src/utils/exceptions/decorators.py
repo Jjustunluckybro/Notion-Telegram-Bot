@@ -29,10 +29,10 @@ def handel_storage_unexpected_response(method: Callable) -> Callable:
                         chat_id=i.from_user.id
                     )
                     await i.message.delete()
-                    break
+                    return wrapper
                 if isinstance(i, types.Message):
                     await i.answer(text=text)
                     await i.message.delete()
-                    break
+                    return wrapper
 
     return wrapper
