@@ -1,4 +1,5 @@
-from aiogram import types
+from aiogram import types, Router
+from aiogram.filters import CommandStart, Command
 
 from src.models.user_model import UserModel
 from src.services.storage.interfaces import IThemesStorageHandler, IUserStorageHandler
@@ -31,3 +32,11 @@ async def start(msg: types.Message, sh: IUserStorageHandler = UserStorageHandler
 async def test(msg: types.Message, storage: IThemesStorageHandler = ThemesStorageHandler()) -> None:
     """Only for dev"""
     ...
+
+
+def register_user_command_router() -> Router:
+    router = Router(name="user_command")
+    router.message.register(start, CommandStart)
+    router.message.register(test, Command("test"))
+
+    return router

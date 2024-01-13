@@ -1,22 +1,23 @@
 from aiogram import Router
 from aiogram.filters import CommandStart, Command
 
-from .user_callbacks import open_all_themes, open_all_theme_notes, open_all_note_alarms
-from .user_commands import test, start
-from src.services.ui.callbacks import Callbacks
+from .user_callbacks import get_user_callbacks_router
+from .user_commands import test, start, register_user_command_router
 
 
 def get_main_router() -> Router:
     """Create main user input router"""
 
-    router = Router(name="router_user_command")
+    router = Router(name="main")
     router.message.register(start, CommandStart)
     router.message.register(test, Command("test"))
 
-    callbacks = Callbacks()
+    user_commands_router = register_user_command_router()
+    user_callbacks_router = get_user_callbacks_router()
 
-    router.callback_query.register(open_all_themes, lambda x: x.data == callbacks.open_all_themes)
-    router.callback_query.register(open_all_theme_notes, lambda x: x.data.startswith(Callbacks.open_theme_start_with))
-    router.callback_query.register(open_all_note_alarms, lambda x: x.data.startswith(Callbacks.open_note_start_with))
+    router.include_routers(
+        user_callbacks_router,
+        user_commands_router
+    )
 
     return router
