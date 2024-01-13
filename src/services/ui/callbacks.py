@@ -4,6 +4,8 @@ from typing import Final
 
 @dataclass
 class Callbacks:
+    CANCEL_FSM: Final[str] = "cancel_fsm"
+
     open_main_menu: Final[str] = "main_menu"
     open_all_themes: Final[str] = "open_all_themes"
     open_all_theme_notes: Final[str] = "open_all_theme_notes"
@@ -20,6 +22,10 @@ class Callbacks:
     delete_theme_start_with: Final[str] = "delete_theme_"
     delete_note_start_with: Final[str] = "delete_note_"
     delete_alarm_start_with: Final[str] = "delete_alarm_"
+
+    CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
+
+    SAVE: Final[str] = "save"
 
     def get_open_theme_callback(self, theme_id: str) -> str:
         return f"{self.open_theme_start_with}{theme_id}"
@@ -42,4 +48,3 @@ class Callbacks:
     @staticmethod
     def get_id_from_callback(callback: str) -> str:  # TODO handle possible exception
         return callback.split("_")[-1]
-
