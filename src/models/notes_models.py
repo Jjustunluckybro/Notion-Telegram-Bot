@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 class CheckpointModel(BaseModel):
     """"""
     text: str
-    is_finished: bool
+    is_finish: bool
 
 
 class NoteLinksModel(BaseModel):

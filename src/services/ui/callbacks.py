@@ -5,14 +5,16 @@ from typing import Final
 @dataclass
 class Callbacks:
     CANCEL_FSM: Final[str] = "cancel_fsm"
+    CANCEL: Final[str] = "cancel"
+    DONE: Final[str] = "done"
 
-    open_main_menu: Final[str] = "main_menu"
+    OPEN_MAIN_MENU: Final[str] = "main_menu"
     open_all_themes: Final[str] = "open_all_themes"
     open_all_theme_notes: Final[str] = "open_all_theme_notes"
     open_all_note_alarms: Final[str] = "open_all_note_alarms"
 
     create_theme: Final[str] = "create_theme"
-    create_note: Final[str] = "create_note"
+    CREATE_NOTE: Final[str] = "create_note_"
     create_alarm: Final[str] = "create_alarm"
 
     open_theme_start_with: Final[str] = "open_theme_"
@@ -26,6 +28,9 @@ class Callbacks:
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
 
     SAVE: Final[str] = "save"
+
+    ADD_ATTACHMENTS: Final[str] = "add_attachment"
+    ADD_CHECKPOINT: Final[str] = "add_checkpoint"
 
     def get_open_theme_callback(self, theme_id: str) -> str:
         return f"{self.open_theme_start_with}{theme_id}"
@@ -44,6 +49,9 @@ class Callbacks:
 
     def get_delete_alarm_note_callback(self, alarm_id: str) -> str:
         return f"{self.delete_alarm_start_with}{alarm_id}"
+
+    def get_create_new_note_callback(self, theme_id: str) -> str:
+        return f"{self.CREATE_NOTE}{theme_id}"
 
     @staticmethod
     def get_id_from_callback(callback: str) -> str:  # TODO handle possible exception

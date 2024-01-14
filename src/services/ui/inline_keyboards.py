@@ -28,7 +28,7 @@ def create_theme_list_kb(themes: list[ThemeModel] | None) -> InlineKeyboardBuild
             builder.button(text=theme.name, callback_data=Callbacks().get_open_theme_callback(theme.id))
 
     builder.button(text="Создать новую тему", callback_data=Callbacks.create_theme)
-    builder.button(text="Назад в меню", callback_data=Callbacks.open_main_menu)
+    builder.button(text="Назад в меню", callback_data=Callbacks.OPEN_MAIN_MENU)
     builder.adjust(1)
     return builder
 
@@ -42,7 +42,7 @@ def create_theme_menu_kb(theme_id: str, theme_notes: list[NoteModel] | None) -> 
         for note in theme_notes:
             builder.button(text=note.name, callback_data=callbacks.get_open_note_callback(note.id))
 
-    builder.button(text="Создать новую заметку", callback_data=callbacks.create_note)
+    builder.button(text="Создать новую заметку", callback_data=callbacks.get_create_new_note_callback(theme_id))
     builder.button(text="Удалить тему", callback_data=callbacks.get_delete_theme_callback(theme_id))
     builder.button(text="Назад к списку тем", callback_data=callbacks.open_all_themes)
     builder.adjust(1)
@@ -83,8 +83,27 @@ def create_cancel_fsm_kb() -> InlineKeyboardBuilder:
     return builder
 
 
+def create_cancel_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Отменить", callback_data=Callbacks.CANCEL)
+    return builder
+
+
 def create_change_fsm_user_data_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Изменить", callback_data=Callbacks.CHANGE_FSM_USER_DATA)
 
+    return builder
+
+
+def create_done_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Готово", callback_data=Callbacks.DONE)
+    return builder
+
+
+def create_set_attachments_or_checkpoints_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Добавить файл", callback_data=Callbacks.ADD_ATTACHMENTS)
+    builder.button(text="Добавить чеклист", callback_data=Callbacks.ADD_CHECKPOINT)
     return builder
