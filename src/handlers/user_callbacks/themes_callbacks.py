@@ -47,14 +47,17 @@ async def open_theme_menu(
     :param theme_sh: Dependency to interact with theme storage
     :param note_sh: Dependency to interact with note storage
     """
-    theme_notes = None
     theme_id = Callbacks.get_id_from_callback(callback.data)
     text = "Список ваших заметок под темой:"
 
     try:
         theme_notes = await note_sh.get_all_by_theme(theme_id)
-        theme = await theme_sh.get(theme_id)
+    except StorageNotFound:
+        text = "Заметок под темой пока нет"
+        theme_notes = None
 
+    try:
+        theme = await theme_sh.get(theme_id)
         text = f"{theme.name}\n\n{theme.description}\n\n" + text
     except StorageNotFound:
         ...

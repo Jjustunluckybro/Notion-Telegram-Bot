@@ -65,8 +65,26 @@ def create_note_menu_kb(note_id: str, note_alarms: list[AlarmModel] | None) -> I
     return builder
 
 
-async def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
-
+def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Удалить напоминание", callback_data=Callbacks().get_delete_alarm_note_callback(alarm.id))
+    return builder
+
+
+def create_save_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Сохранить", callback_data=Callbacks.SAVE)
+    return builder
+
+
+def create_cancel_fsm_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Вернуться в меню", callback_data=Callbacks.CANCEL_FSM)
+    return builder
+
+
+def create_change_fsm_user_data_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Изменить", callback_data=Callbacks.CHANGE_FSM_USER_DATA)
+
     return builder
