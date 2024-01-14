@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ThemeLinksModel(BaseModel):
@@ -8,7 +8,7 @@ class ThemeLinksModel(BaseModel):
 
 class ThemeModel(BaseModel):
     """Represent theme. Store in the backend db with same model"""
-    _id: str
+    id: str = Field(alias="_id")
     name: str
     description: str
     links: ThemeLinksModel
