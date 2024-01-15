@@ -34,9 +34,9 @@ async def start(msg: types.Message, sh: IUserStorageHandler = UserStorageHandler
         await msg.answer(text="Тут текст приветствия и главного меню", reply_markup=kb.as_markup())
 
 
-async def test(msg: types.Message, storage: IThemesStorageHandler = ThemesStorageHandler()) -> None:
+async def test(msg: types.Message, storage: IThemesStorageHandler = ThemesStorageHandler()) -> None:  # TODO
     """Only for dev"""
-    logger.info(f"start handling 'start' event from user: {msg.from_user.id}")
+    logger.info(f"start handling 'start' event from user: {msg.from_user.id}") 
 
 
 def register_user_command_router() -> Router:
