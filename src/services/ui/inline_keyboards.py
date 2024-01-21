@@ -11,7 +11,7 @@ def create_main_menu_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Открыть список тем", callback_data=Callbacks.open_all_themes)
     builder.button(text="Создать новую тему", callback_data=Callbacks.create_theme)
-    builder.button(text="Создать новое напоминание", callback_data=Callbacks.create_alarm)
+    builder.button(text="Создать новое напоминание", callback_data=Callbacks.CREATE_ALARM)
     builder.adjust(1)
     return builder
 
@@ -58,7 +58,7 @@ def create_note_menu_kb(note_id: str, note_alarms: list[AlarmModel] | None) -> I
         for alarm in note_alarms:
             builder.button(text=alarm.name, callback_data=callbacks.get_open_alarm_callback(alarm.id))
 
-    builder.button(text="Создать новое напоминание", callback_data=callbacks.create_alarm)
+    builder.button(text="Создать новое напоминание", callback_data=callbacks.get_create_new_alarm_callback(note_id))
     builder.button(text="Удалить текущую заметку", callback_data=callbacks.get_delete_note_callback(note_id))
     builder.button(text="Назад к списку заметок", callback_data=callbacks.get_open_note_callback(note_id))
     builder.adjust(1)
@@ -106,4 +106,11 @@ def create_set_attachments_or_checkpoints_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Добавить файл", callback_data=Callbacks.ADD_ATTACHMENTS)
     builder.button(text="Добавить чеклист", callback_data=Callbacks.ADD_CHECKPOINT)
+    return builder
+
+
+def create_yes_no_keyboard() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Да", callback_data=Callbacks.YES)
+    builder.button(text="Нет", callback_data=Callbacks.NO)
     return builder

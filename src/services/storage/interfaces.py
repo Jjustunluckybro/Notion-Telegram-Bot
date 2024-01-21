@@ -172,7 +172,7 @@ class IAlarmsStoragehandler(IStorageRequestHandler, ABC):
         ...
 
     @abstractmethod
-    async def create(self, alarm: AlarmModelToCreate, next_notion_time: datetime, repeat_interval: int) -> str:
+    async def create(self, alarm: AlarmModelToCreate, next_notion_time: datetime, repeat_interval: int | None) -> str:
         """Create new alarm in storage"""
         ...
 

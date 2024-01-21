@@ -244,6 +244,8 @@ async def create_note_save(
                 check_points=checkpoints
             )
         )
+
+        note_id = await sh.create(note)  # TODO Handel storage exceptions
     except KeyError as err:
         logger.error(f"Can't find user fsm data. details: {err}. user_data: {user_data}")
         await callback.bot.send_message(
@@ -257,7 +259,6 @@ async def create_note_save(
             chat_id=callback.from_user.id,
         )
     else:
-        note_id = await sh.create(note)  # TODO Handel storage exceptions
         logger.info(f"Successfully create theme with id: {note_id}")
         await callback.bot.send_message(
             text=f"Заметка {user_data.get('note_name')} успешно создана",

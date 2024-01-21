@@ -15,7 +15,7 @@ class Callbacks:
 
     create_theme: Final[str] = "create_theme"
     CREATE_NOTE: Final[str] = "create_note_"
-    create_alarm: Final[str] = "create_alarm"
+    CREATE_ALARM: Final[str] = "create_alarm_"
 
     open_theme_start_with: Final[str] = "open_theme_"
     open_note_start_with: Final[str] = "open_note_"
@@ -31,6 +31,9 @@ class Callbacks:
 
     ADD_ATTACHMENTS: Final[str] = "add_attachment"
     ADD_CHECKPOINT: Final[str] = "add_checkpoint"
+
+    YES: Final[str] = "yes"
+    NO: Final[str] = "no"
 
     def get_open_theme_callback(self, theme_id: str) -> str:
         return f"{self.open_theme_start_with}{theme_id}"
@@ -52,6 +55,9 @@ class Callbacks:
 
     def get_create_new_note_callback(self, theme_id: str) -> str:
         return f"{self.CREATE_NOTE}{theme_id}"
+
+    def get_create_new_alarm_callback(self, note_id: str) -> str:
+        return f"{self.CREATE_ALARM}{note_id}"
 
     @staticmethod
     def get_id_from_callback(callback: str) -> str:  # TODO handle possible exception
