@@ -39,6 +39,6 @@ def get_note_router(callbacks: Callbacks = Callbacks()) -> Router:
     """
     router = Router(name=__name__)
 
-    router.callback_query.register(open_note_menu, lambda x: x.data.startswith(callbacks.open_note_start_with))
+    router.callback_query.register(open_note_menu, lambda x: x.data.startswith(callbacks.OPEN_NOTE_START_WITH))
 
     return router

@@ -9,8 +9,8 @@ from src.services.ui.callbacks import Callbacks
 def create_main_menu_kb() -> InlineKeyboardBuilder:
     """"""
     builder = InlineKeyboardBuilder()
-    builder.button(text="Открыть список тем", callback_data=Callbacks.open_all_themes)
-    builder.button(text="Создать новую тему", callback_data=Callbacks.create_theme)
+    builder.button(text="Открыть список тем", callback_data=Callbacks.OPEN_ALL_THEMES)
+    builder.button(text="Создать новую тему", callback_data=Callbacks.CREATE_THEME)
     builder.button(text="Создать новое напоминание", callback_data=Callbacks.CREATE_ALARM)
     builder.adjust(1)
     return builder
@@ -27,7 +27,7 @@ def create_theme_list_kb(themes: list[ThemeModel] | None) -> InlineKeyboardBuild
         for theme in themes:
             builder.button(text=theme.name, callback_data=Callbacks().get_open_theme_callback(theme.id))
 
-    builder.button(text="Создать новую тему", callback_data=Callbacks.create_theme)
+    builder.button(text="Создать новую тему", callback_data=Callbacks.CREATE_THEME)
     builder.button(text="Назад в меню", callback_data=Callbacks.OPEN_MAIN_MENU)
     builder.adjust(1)
     return builder
@@ -44,7 +44,7 @@ def create_theme_menu_kb(theme_id: str, theme_notes: list[NoteModel] | None) -> 
 
     builder.button(text="Создать новую заметку", callback_data=callbacks.get_create_new_note_callback(theme_id))
     builder.button(text="Удалить тему", callback_data=callbacks.get_delete_theme_callback(theme_id))
-    builder.button(text="Назад к списку тем", callback_data=callbacks.open_all_themes)
+    builder.button(text="Назад к списку тем", callback_data=callbacks.OPEN_ALL_THEMES)
     builder.adjust(1)
     return builder
 

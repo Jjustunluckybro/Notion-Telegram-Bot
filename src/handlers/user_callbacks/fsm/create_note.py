@@ -6,8 +6,8 @@ from aiogram.fsm.context import FSMContext
 from pydantic import ValidationError
 
 from src.models.notes_models import NoteModelToCreate, NoteLinksModel, NoteDataModel, CheckpointModel
-from src.services.storage.interfaces import INotesStoragehandler
-from src.services.storage.notes_storage_handler import NotesStoragehandler
+from src.services.storage.interfaces import INotesStorageHandler
+from src.services.storage.notes_storage_handler import NotesStorageHandler
 from src.services.ui.callbacks import Callbacks
 from src.services.ui.inline_keyboards import create_cancel_fsm_kb, create_save_kb, create_change_fsm_user_data_kb, \
     create_set_attachments_or_checkpoints_kb, create_cancel_kb, create_done_kb, create_main_menu_kb
@@ -211,7 +211,7 @@ async def create_note_process_checkpoint(message: types.Message, state: FSMConte
 async def create_note_save(
         callback: types.CallbackQuery,
         state: FSMContext,
-        sh: INotesStoragehandler = NotesStoragehandler()
+        sh: INotesStorageHandler = NotesStorageHandler()
 ) -> None:
     """"""
     user_data = await state.get_data()

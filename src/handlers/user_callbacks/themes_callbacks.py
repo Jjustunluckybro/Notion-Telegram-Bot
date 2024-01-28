@@ -2,8 +2,8 @@ from logging import getLogger
 
 from aiogram import Router, types
 
-from src.services.storage.interfaces import IThemesStorageHandler, INotesStoragehandler
-from src.services.storage.notes_storage_handler import NotesStoragehandler
+from src.services.storage.interfaces import IThemesStorageHandler, INotesStorageHandler
+from src.services.storage.notes_storage_handler import NotesStorageHandler
 from src.services.storage.themes_storage_handler import ThemesStorageHandler
 from src.services.ui.callbacks import Callbacks
 from src.services.ui.inline_keyboards import create_theme_list_kb, create_theme_menu_kb
@@ -39,7 +39,7 @@ async def open_all_themes(callback: types.CallbackQuery, sh: IThemesStorageHandl
 async def open_theme_menu(
         callback: types.CallbackQuery,
         theme_sh: IThemesStorageHandler = ThemesStorageHandler(),
-        note_sh: INotesStoragehandler = NotesStoragehandler()
+        note_sh: INotesStorageHandler = NotesStorageHandler()
 ) -> None:
     """
     Open all theme notes as inline keyboard. Create keys to create or delete note + return to theme list
@@ -79,7 +79,7 @@ def get_themes_router(callbacks: Callbacks = Callbacks()) -> Router:
     """
     router = Router(name="themes")
 
-    router.callback_query.register(open_all_themes, lambda x: x.data == callbacks.open_all_themes)
-    router.callback_query.register(open_theme_menu, lambda x: x.data.startswith(callbacks.open_theme_start_with))
+    router.callback_query.register(open_all_themes, lambda x: x.data == callbacks.OPEN_ALL_THEMES)
+    router.callback_query.register(open_theme_menu, lambda x: x.data.startswith(callbacks.OPEN_THEME_START_WITH))
 
     return router

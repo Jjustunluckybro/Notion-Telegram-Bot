@@ -88,7 +88,7 @@ class IThemesStorageHandler(IStorageRequestHandler, ABC):
         ...
 
 
-class INotesStoragehandler(IStorageRequestHandler, ABC):
+class INotesStorageHandler(IStorageRequestHandler, ABC):
 
     def __init__(self) -> None:
         self.logger = getLogger(f"{__name__}.notes")
