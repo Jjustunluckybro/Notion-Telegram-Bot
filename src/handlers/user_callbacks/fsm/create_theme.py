@@ -20,7 +20,7 @@ logger = getLogger(f"fsm_{__name__}")
 router = Router(name=__name__)
 
 
-@router.callback_query(lambda x: x.data == Callbacks.create_theme, StateFilter(None))
+@router.callback_query(lambda x: x.data == Callbacks.CREATE_THEME, StateFilter(None))
 @router.callback_query(lambda x: x.data == Callbacks.CHANGE_FSM_USER_DATA, CreateThemeFSM.accept)
 async def create_theme(
         callback: types.CallbackQuery,

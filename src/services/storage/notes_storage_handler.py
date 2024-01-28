@@ -3,12 +3,12 @@ from typing import Any, List
 from pydantic import ValidationError, TypeAdapter
 
 from src.models.notes_models import NoteModelToCreate, NoteModel
-from src.services.storage.interfaces import INotesStoragehandler
+from src.services.storage.interfaces import INotesStorageHandler
 from src.utils import statuses
 from src.utils.exceptions.storage import StorageValidationError, StorageNotFound, UnexpectedResponse
 
 
-class NotesStoragehandler(INotesStoragehandler):
+class NotesStorageHandler(INotesStorageHandler):
     async def get(self, _id: str) -> NoteModel:
         """"""
 

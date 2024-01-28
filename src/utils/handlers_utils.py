@@ -23,3 +23,24 @@ async def del_prev_message_and_write_current_message_as_prev(
         )
     finally:
         await state.update_data(last_message_id=current_message_id)
+
+
+async def send_error_message(
+        message: types.Message | types.CallbackQuery,
+        state: FSMContext | None = None
+) -> types.Message:
+    """"""
+    text = "Что-то пошло не так, попробуйте позже :("
+
+    if state is not None:
+        await state.clear()
+
+    if isinstance(message, types.Message):
+        message_out = await message.answer(text)
+    else:
+        message_out = await message.bot.send_message(
+            chat_id=message.from_user.id,
+            text=text
+        )
+
+    return message_out

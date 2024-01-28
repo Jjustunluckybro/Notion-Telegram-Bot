@@ -7,6 +7,10 @@ class CreateThemeFSM(StatesGroup):
     accept: State = State()
 
 
+class DeleteTheme(StatesGroup):
+    accept: State = State()
+
+
 class CreateNote(StatesGroup):
     write_name: State = State()
     write_text: State = State()
