@@ -89,28 +89,21 @@ async def delete_theme_yes(
 async def delete_theme_no(
         callback: types.CallbackQuery,
         state: FSMContext,
-        theme_sh: IThemesStorageHandler = ThemesStorageHandler(),
         note_sh: INotesStorageHandler = NotesStorageHandler()
 ) -> None:
     """"""
+    theme_notes = None
     user_data = await state.get_data()
     theme: ThemeModel = user_data.get("theme")
-    theme_id = theme.id
     text = "Список ваших заметок под темой:"
 
     try:
-        theme_notes = await note_sh.get_all_by_theme(theme_id)
+        theme_notes = await note_sh.get_all_by_theme(theme.id)
     except StorageNotFound:
         text = "Заметок под темой пока нет"
-        theme_notes = None
-
-    try:
-        theme = await theme_sh.get(theme_id)
-        text = f"{theme.name}\n\n{theme.description}\n\n" + text
-    except StorageNotFound:
-        ...
     finally:
-        kb = create_theme_menu_kb(theme_id, theme_notes)
+        text = f"{theme.name}\n\n{theme.description}\n\n" + text
+        kb = create_theme_menu_kb(theme.id, theme_notes)
         await callback.bot.send_message(
             text=text,
             reply_markup=kb.as_markup(),
