@@ -9,11 +9,13 @@ from src.services.ui.callbacks import Callbacks
 from src.services.ui.inline_keyboards import create_theme_list_kb, create_theme_menu_kb
 from src.utils.exceptions.decorators import handel_storage_unexpected_response
 from src.utils.exceptions.storage import StorageNotFound
+from src.utils.handlers_utils import async_method_arguments_logger
 
 logger = getLogger(__name__)
 
 
 @handel_storage_unexpected_response
+@async_method_arguments_logger(logger)
 async def open_all_themes(callback: types.CallbackQuery, sh: IThemesStorageHandler = ThemesStorageHandler()) -> None:
     """
     Open inline menu with all users themes as a button
