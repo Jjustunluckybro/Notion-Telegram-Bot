@@ -74,7 +74,7 @@ class NotesStorageHandler(INotesStorageHandler):
         match response.status:
             case statuses.CREATED_201:
                 self.logger.info(f"Note was successful created with id: {response.body}")
-                return response.body
+                return response.body.replace("'", "").replace('"', "")
             case statuses.VALIDATION_ERROR_422:
                 self.logger.error(f"Request body doesn't match validation: {response.body}")
                 raise StorageValidationError(f"Request body doesn't match validation: {response.body}")

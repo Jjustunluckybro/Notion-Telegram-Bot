@@ -19,7 +19,7 @@ logger = getLogger(__name__)
 @async_method_arguments_logger(logger)
 async def open_all_themes(
         callback: types.CallbackQuery,
-        state: FSMContext,
+        state: FSMContext | None,
         sh: IThemesStorageHandler = ThemesStorageHandler()) -> None:
     """
     Open inline menu with all users themes as a button
@@ -49,17 +49,22 @@ async def open_all_themes(
 @async_method_arguments_logger(logger)
 async def open_theme_menu(
         callback: types.CallbackQuery,
+        state: FSMContext | None,
         theme_sh: IThemesStorageHandler = ThemesStorageHandler(),
-        note_sh: INotesStorageHandler = NotesStorageHandler()
+        note_sh: INotesStorageHandler = NotesStorageHandler(),
 ) -> None:
     """
     Open all theme notes as inline keyboard. Create keys to create or delete note + return to theme list
+    :param state:
     :param callback:
     :param theme_sh: Dependency to interact with theme storage
     :param note_sh: Dependency to interact with note storage
     """
     theme_id = Callbacks.get_id_from_callback(callback.data)
     text = "Список ваших заметок под темой:"
+
+    if state is not None:
+        await state.clear()
 
     try:
         theme_notes = await note_sh.get_all_by_theme(theme_id)

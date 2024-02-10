@@ -9,12 +9,12 @@ from src.services.storage.interfaces import INotesStorageHandler, IThemesStorage
 from src.services.storage.notes_storage_handler import NotesStorageHandler
 from src.services.storage.themes_storage_handler import ThemesStorageHandler
 from src.services.ui.callbacks import Callbacks
-from src.services.ui.inline_keyboards import create_yes_no_keyboard, create_theme_menu_kb, create_note_menu_kb
+from src.services.ui.inline_keyboards import create_yes_no_keyboard, create_theme_menu_kb, create_note_menu_kb, \
+    create_cancel_fsm_kb
 from src.utils.exceptions.decorators import handel_storage_unexpected_response
 from src.utils.exceptions.storage import StorageValidationError, StorageNotFound
 from src.utils.fsm.fsm import DeleteNote
-from src.utils.handlers_utils import async_method_arguments_logger, del_prev_message_and_write_current_message_as_prev, \
-    send_error_message
+from src.utils.handlers_utils import async_method_arguments_logger, send_error_message
 
 logger = getLogger(__name__)
 router = Router(name=__name__)
@@ -136,7 +136,8 @@ async def delete_note_no(
     except StorageNotFound:
         text += f"Еще тут будет список ваших напоминаний, но пока их нет.\nCоздайте новое напоминание"
     finally:
-        kb = create_note_menu_kb(note.id, note_alarms)
+        kb = create_note_menu_kb(note_id=note.id, note_alarms=note_alarms, parent_theme_id=note.links.theme_id)
+        kb.attach(create_cancel_fsm_kb())
         await callback.bot.send_message(
             chat_id=callback.from_user.id,
             text=text,

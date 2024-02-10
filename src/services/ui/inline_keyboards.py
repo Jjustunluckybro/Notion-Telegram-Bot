@@ -12,9 +12,27 @@ def create_themes_list_kb(key_text: str = "К списку тем") -> InlineKey
     return builder
 
 
-def create_open_theme_kb(theme_id: str, theme_name: str) -> InlineKeyboardBuilder:
+def create_open_theme_kb(
+        theme_id: str,
+        theme_name: str | None,
+        text: str | None = None
+) -> InlineKeyboardBuilder:
+    """
+    Create inline keyboard with one key
+    :param theme_id: theme to open
+    :param theme_name: if text is None, text will be "open theme `theme_name`"
+    :param text: if not none, key will have this text
+    :return:
+    """
     builder = InlineKeyboardBuilder()
-    builder.button(text=f"Открыть тему: {theme_name}", callback_data=Callbacks().get_open_theme_callback(theme_id))
+    text = text if text is not None else f"Открыть тему: {theme_name}"
+    builder.button(text=text, callback_data=Callbacks().get_open_theme_callback(theme_id))
+    return builder
+
+
+def create_open_note_kb(note_id: str, note_name: str) -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=f"Открыть заметку: {note_name}", callback_data=Callbacks().get_open_note_callback(note_id))
     return builder
 
 
@@ -61,7 +79,8 @@ def create_theme_menu_kb(theme_id: str, theme_notes: list[NoteModel] | None) -> 
     return builder
 
 
-def create_note_menu_kb(note_id: str, note_alarms: list[AlarmModel] | None) -> InlineKeyboardBuilder:
+def create_note_menu_kb(note_id: str, parent_theme_id: str,
+                        note_alarms: list[AlarmModel] | None) -> InlineKeyboardBuilder:
     """"""
     builder = InlineKeyboardBuilder()
 
@@ -72,7 +91,7 @@ def create_note_menu_kb(note_id: str, note_alarms: list[AlarmModel] | None) -> I
 
     builder.button(text="Создать новое напоминание", callback_data=callbacks.get_create_new_alarm_callback(note_id))
     builder.button(text="Удалить текущую заметку", callback_data=callbacks.get_delete_note_callback(note_id))
-    builder.button(text="Назад к списку заметок", callback_data=callbacks.get_open_note_callback(note_id))
+    builder.button(text=f"Назад к теме", callback_data=callbacks.get_open_theme_callback(parent_theme_id))
     builder.adjust(1)
     return builder
 

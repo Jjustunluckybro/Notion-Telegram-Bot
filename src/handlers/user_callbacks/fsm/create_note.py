@@ -10,9 +10,11 @@ from src.services.storage.interfaces import INotesStorageHandler
 from src.services.storage.notes_storage_handler import NotesStorageHandler
 from src.services.ui.callbacks import Callbacks
 from src.services.ui.inline_keyboards import create_cancel_fsm_kb, create_save_kb, create_change_fsm_user_data_kb, \
-    create_set_attachments_or_checkpoints_kb, create_cancel_kb, create_done_kb, create_main_menu_kb
-from src.utils.exceptions.storage import StorageValidationError
+    create_set_attachments_or_checkpoints_kb, create_cancel_kb, create_done_kb, create_open_note_kb, \
+    create_open_theme_kb
+from src.utils.exceptions.decorators import handel_storage_unexpected_response
 from src.utils.fsm.fsm import CreateNote
+from src.utils.handlers_utils import send_error_message
 
 logger = getLogger(f"fsm_{__name__}")
 router = Router()
@@ -23,10 +25,12 @@ async def create_note(callback: types.CallbackQuery, state: FSMContext) -> None:
     """"""
     parent_id = Callbacks.get_id_from_callback(callback.data)
     await state.update_data(parent_id=parent_id)
+    kb = create_open_theme_kb(theme_id=parent_id, text="Вернуться к теме", theme_name=None)
+    kb.attach(create_cancel_fsm_kb())
     message = await callback.bot.send_message(
         text="Введите название заметки",
         chat_id=callback.from_user.id,
-        reply_markup=create_cancel_fsm_kb().as_markup()
+        reply_markup=kb.as_markup()
     )
     await state.update_data(last_message_id=message.message_id)
 
@@ -38,14 +42,19 @@ async def create_note(callback: types.CallbackQuery, state: FSMContext) -> None:
 async def create_note_write_name(message: types.Message, state: FSMContext) -> None:
     user_data = await state.get_data()
     previous_message_id = user_data.get("last_message_id")
+    parent_id = user_data.get("parent_id")
 
     # Update user data
     await state.update_data(note_name=message.text)
 
+    # Create keyboard
+    kb = create_open_theme_kb(theme_id=parent_id, text="Вернуться к теме", theme_name=None)
+    kb.attach(create_cancel_fsm_kb())
+
     # Answer to user
     out_message = await message.answer(
         text=f"Имя заметки: {message.text}, теперь введите текст заметки",
-        reply_markup=create_cancel_fsm_kb().as_markup()
+        reply_markup=kb.as_markup()
     )
     await state.update_data(last_message_id=out_message.message_id)
 
@@ -59,8 +68,8 @@ async def create_note_write_name(message: types.Message, state: FSMContext) -> N
     await state.set_state(CreateNote.write_text)
 
 
-@router.callback_query(lambda x: x.data == Callbacks.DONE, CreateNote.write_attachments)
-@router.callback_query(lambda x: x.data == Callbacks.DONE, CreateNote.write_checkpoints)
+@router.callback_query(lambda x: x.data in [Callbacks.CANCEL, Callbacks.DONE] , CreateNote.write_attachments)
+@router.callback_query(lambda x: x.data in [Callbacks.CANCEL, Callbacks.DONE], CreateNote.write_checkpoints)
 async def create_note_back_from_attachments_or_checkpoints(
         callback: types.CallbackQuery,
         state: FSMContext
@@ -68,11 +77,13 @@ async def create_note_back_from_attachments_or_checkpoints(
     """"""
     user_data = await state.get_data()
     previous_message_id = user_data.get("last_message_id")
+    parent_id = user_data.get("parent_id")
 
     # Create inline keyboard
     kb = create_save_kb()
     kb.attach(create_set_attachments_or_checkpoints_kb())
     kb.attach(create_change_fsm_user_data_kb())
+    kb.attach(create_open_theme_kb(theme_id=parent_id, text="Вернуться к теме", theme_name=None))
     kb.attach(create_cancel_fsm_kb())
 
     out_message = await callback.bot.send_message(
@@ -101,11 +112,13 @@ async def create_note_write_text(
 
     user_data = await state.get_data()
     previous_message_id = user_data.get("last_message_id")
+    parent_id = user_data.get("parent_id")
 
     # Create inline keyboard
     kb = create_save_kb()
     kb.attach(create_set_attachments_or_checkpoints_kb())
     kb.attach(create_change_fsm_user_data_kb())
+    kb.attach(create_open_theme_kb(theme_id=parent_id, text="Вернуться к теме", theme_name=None))
     kb.attach(create_cancel_fsm_kb())
 
     out_message = await message.answer(
@@ -179,7 +192,7 @@ async def create_note_add_checkpoint(callback: types.CallbackQuery, state: FSMCo
     message_out = await callback.bot.send_message(
         text="Отправьте текст чеклиста",
         chat_id=callback.from_user.id,
-        reply_markup=create_done_kb().as_markup()
+        reply_markup=create_cancel_kb().as_markup()
     )
     await state.update_data(last_message_id=message_out.message_id)
     await state.set_state(CreateNote.write_checkpoints)
@@ -208,6 +221,7 @@ async def create_note_process_checkpoint(message: types.Message, state: FSMConte
 
 
 @router.callback_query(lambda x: x.data == Callbacks.SAVE, CreateNote.accept)
+@handel_storage_unexpected_response
 async def create_note_save(
         callback: types.CallbackQuery,
         state: FSMContext,
@@ -216,11 +230,6 @@ async def create_note_save(
     """"""
     user_data = await state.get_data()
     previous_message_id = user_data.get("last_message_id")
-    await callback.bot.delete_message(
-        chat_id=callback.from_user.id,
-        message_id=previous_message_id
-    )
-
     checkpoints_texts = user_data.get("checkpoints")
     if checkpoints_texts is not None:
         checkpoints = []
@@ -244,26 +253,28 @@ async def create_note_save(
                 check_points=checkpoints
             )
         )
-
-        note_id = await sh.create(note)  # TODO Handel storage exceptions
+        note_id = await sh.create(note)
     except KeyError as err:
         logger.error(f"Can't find user fsm data. details: {err}. user_data: {user_data}")
-        await callback.bot.send_message(
-            text="Что-то пошло не так, попробуйте позже",
-            chat_id=callback.from_user.id,
-        )
+        await send_error_message(callback)
     except ValidationError as err:
         logger.error(f"Model validation error. details: {err}")
-        await callback.bot.send_message(
-            text="Что-то пошло не так, попробуйте позже",
-            chat_id=callback.from_user.id,
-        )
+        await send_error_message(callback)
     else:
         logger.info(f"Successfully create theme with id: {note_id}")
+        kb = create_open_note_kb(note_id=note_id, note_name=note.name)
+        kb.attach(
+            create_open_theme_kb(theme_id=note.links.theme_id, text="Вернуться к теме", theme_name=None)
+        )
+        kb.attach(create_cancel_fsm_kb())
         await callback.bot.send_message(
-            text=f"Заметка {user_data.get('note_name')} успешно создана",
+            text=f"Заметка {note.name} успешно создана",
             chat_id=callback.from_user.id,
-            reply_markup=create_main_menu_kb().as_markup()
+            reply_markup=kb.as_markup()
         )
     finally:
+        await callback.bot.delete_message(
+            chat_id=callback.from_user.id,
+            message_id=previous_message_id
+        )
         await state.clear()
