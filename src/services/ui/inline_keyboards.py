@@ -6,6 +6,18 @@ from src.models.themes_modles import ThemeModel
 from src.services.ui.callbacks import Callbacks
 
 
+def create_themes_list_kb(key_text: str = "К списку тем") -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=key_text, callback_data=Callbacks.OPEN_ALL_THEMES)
+    return builder
+
+
+def create_open_theme_kb(theme_id: str, theme_name: str) -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=f"Открыть тему: {theme_name}", callback_data=Callbacks().get_open_theme_callback(theme_id))
+    return builder
+
+
 def create_main_menu_kb() -> InlineKeyboardBuilder:
     """"""
     builder = InlineKeyboardBuilder()
@@ -44,7 +56,7 @@ def create_theme_menu_kb(theme_id: str, theme_notes: list[NoteModel] | None) -> 
 
     builder.button(text="Создать новую заметку", callback_data=callbacks.get_create_new_note_callback(theme_id))
     builder.button(text="Удалить тему", callback_data=callbacks.get_delete_theme_callback(theme_id))
-    builder.button(text="Назад к списку тем", callback_data=callbacks.OPEN_ALL_THEMES)
+    builder.attach(create_themes_list_kb("Назад к списку тем"))
     builder.adjust(1)
     return builder
 
@@ -77,9 +89,9 @@ def create_save_kb() -> InlineKeyboardBuilder:
     return builder
 
 
-def create_cancel_fsm_kb() -> InlineKeyboardBuilder:
+def create_cancel_fsm_kb(key_text: str = "Вернуться в меню") -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
-    builder.button(text="Вернуться в меню", callback_data=Callbacks.CANCEL_FSM)
+    builder.button(text=key_text, callback_data=Callbacks.CANCEL_FSM)
     return builder
 
 

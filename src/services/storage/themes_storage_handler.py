@@ -1,4 +1,3 @@
-import asyncio
 from typing import Any, List
 
 from pydantic import ValidationError, TypeAdapter
@@ -68,7 +67,7 @@ class ThemesStorageHandler(IThemesStorageHandler):
         match response.status:
             case statuses.CREATED_201:
                 self.logger.info(f"Theme was successful created with id: {response.body}")
-                return response.body
+                return response.body.replace("'", "").replace('"', "")
             case statuses.VALIDATION_ERROR_422:
                 self.logger.error(f"Request body doesn't match validation: {response.body}")
                 raise StorageValidationError(f"Request body doesn't match validation: {response.body}")

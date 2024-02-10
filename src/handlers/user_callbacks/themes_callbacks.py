@@ -1,6 +1,7 @@
 from logging import getLogger
 
 from aiogram import Router, types
+from aiogram.fsm.context import FSMContext
 
 from src.services.storage.interfaces import IThemesStorageHandler, INotesStorageHandler
 from src.services.storage.notes_storage_handler import NotesStorageHandler
@@ -16,13 +17,20 @@ logger = getLogger(__name__)
 
 @handel_storage_unexpected_response
 @async_method_arguments_logger(logger)
-async def open_all_themes(callback: types.CallbackQuery, sh: IThemesStorageHandler = ThemesStorageHandler()) -> None:
+async def open_all_themes(
+        callback: types.CallbackQuery,
+        state: FSMContext,
+        sh: IThemesStorageHandler = ThemesStorageHandler()) -> None:
     """
     Open inline menu with all users themes as a button
+    :param state: Current fsm state, clear this state if not none
     :param callback: telegram inline query callback
     :param sh: Dependency
     """
     user_themes = None
+
+    if state is not None:
+        await state.clear()
 
     try:
         user_themes = await sh.get_all_by_user(str(callback.from_user.id))
@@ -38,6 +46,7 @@ async def open_all_themes(callback: types.CallbackQuery, sh: IThemesStorageHandl
 
 
 @handel_storage_unexpected_response
+@async_method_arguments_logger(logger)
 async def open_theme_menu(
         callback: types.CallbackQuery,
         theme_sh: IThemesStorageHandler = ThemesStorageHandler(),
