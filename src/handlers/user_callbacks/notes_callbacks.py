@@ -14,7 +14,10 @@ from src.utils.handlers_utils import send_error_message
 
 logger = getLogger(__name__)
 
+router = Router(name=__name__)
 
+
+@router.callback_query(lambda x: x.data.startswith(Callbacks.OPEN_NOTE_START_WITH))
 @handel_storage_unexpected_response
 async def open_note_menu(callback: types.CallbackQuery,
                          notes_sh: INotesStorageHandler = NotesStorageHandler(),
@@ -57,13 +60,3 @@ async def open_note_menu(callback: types.CallbackQuery,
             chat_id=callback.from_user.id
         )
         await callback.message.delete()
-
-
-def get_note_router(callbacks: Callbacks = Callbacks()) -> Router:
-    """
-    """
-    router = Router(name=__name__)
-
-    router.callback_query.register(open_note_menu, lambda x: x.data.startswith(callbacks.OPEN_NOTE_START_WITH))
-
-    return router

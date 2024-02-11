@@ -1,6 +1,6 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.models.alarm_model import AlarmModel
+from src.models.alarm_model import AlarmModel, AlarmStatus
 from src.models.notes_models import NoteModel
 from src.models.themes_modles import ThemeModel
 from src.services.ui.callbacks import Callbacks
@@ -98,7 +98,37 @@ def create_note_menu_kb(note_id: str, parent_theme_id: str,
 
 def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
-    builder.button(text="Удалить напоминание", callback_data=Callbacks().get_delete_alarm_note_callback(alarm.id))
+    callbacks = Callbacks()
+    builder.button(
+        text="Задать новое время напоминаня",
+        callback_data=callbacks.add_id_to_callback_string(callbacks.SET_NEW_ALARM_TIME, alarm.id)
+    )
+
+    if alarm.is_repeatable:
+        builder.button(
+            text="Отключить повторение напоминания",
+            callback_data=callbacks.add_id_to_callback_string(callbacks.SET_ALARM_NOT_REPEATABLE, alarm.id)
+        )
+        builder.button(
+            text="Задать новый интервал повторения",
+            callback_data=callbacks.add_id_to_callback_string(callbacks.SET_ALARM_NEW_REPEAT_INTERVAL, alarm.id)
+        )
+    else:
+        builder.button(
+            text="Сделать напоминание повторяющимся",
+            callback_data=callbacks.add_id_to_callback_string(callbacks.SET_ALARM_REPEATABLE, alarm.id)
+        )
+
+    if alarm.status == AlarmStatus.QUEUE:
+        builder.button(
+            text="Отключить напоминание",
+            callback_data=callbacks.add_id_to_callback_string(callbacks.FINISH_ALARM, alarm.id)
+        )
+
+    builder.button(text="Удалить напоминание", callback_data=callbacks.get_delete_alarm_note_callback(alarm.id))
+    builder.button(text="Вернуться к заметке", callback_data=callbacks.get_open_note_callback(alarm.links.parent_id))
+    builder.button(text="Назад в меню", callback_data=Callbacks.OPEN_MAIN_MENU)
+    builder.adjust(1)
     return builder
 
 

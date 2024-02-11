@@ -14,7 +14,10 @@ from src.utils.handlers_utils import async_method_arguments_logger
 
 logger = getLogger(__name__)
 
+router = Router(name=__name__)
 
+
+@router.callback_query(lambda x: x.data == Callbacks.OPEN_ALL_THEMES)
 @handel_storage_unexpected_response
 @async_method_arguments_logger(logger)
 async def open_all_themes(
@@ -45,6 +48,7 @@ async def open_all_themes(
     await callback.message.delete()
 
 
+@router.callback_query(lambda x: x.data.startswith(Callbacks.OPEN_THEME_START_WITH))
 @handel_storage_unexpected_response
 @async_method_arguments_logger(logger)
 async def open_theme_menu(
@@ -85,17 +89,3 @@ async def open_theme_menu(
             chat_id=callback.from_user.id
         )
         await callback.message.delete()
-
-
-def get_themes_router(callbacks: Callbacks = Callbacks()) -> Router:
-    """
-    Register all callback handlers to use main menu
-    :callbacks: Dependency
-    :return: routers with registered handlers
-    """
-    router = Router(name="themes")
-
-    router.callback_query.register(open_all_themes, lambda x: x.data == callbacks.OPEN_ALL_THEMES)
-    router.callback_query.register(open_theme_menu, lambda x: x.data.startswith(callbacks.OPEN_THEME_START_WITH))
-
-    return router
