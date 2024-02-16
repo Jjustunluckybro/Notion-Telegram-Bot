@@ -39,10 +39,15 @@ async def del_prev_message_and_write_current_message_as_prev(
     except KeyError:
         ...
     else:
+        if isinstance(message, types.Message):
+            chat_id = message.chat.id
+        else:
+            chat_id = message.message.chat.id
         await message.bot.delete_message(
-            chat_id=message.from_user.id,
-            message_id=prev_message_id
+            message_id=prev_message_id,
+            chat_id=chat_id,
         )
+
     finally:
         await state.update_data(last_message_id=current_message_id)
 

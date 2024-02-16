@@ -95,11 +95,11 @@ async def set_alarm_not_repeatable(
     alarm_id = Callbacks.get_id_from_callback(callback.data)
 
     try:
-        await alarms_storage.path(alarm_id, {"is_repeatable": False})
+        await alarms_storage.patch(alarm_id, {"is_repeatable": False})
     except StorageValidationError:
         await send_error_message(callback)
     except StorageNotFound as err:
-        f"Not found alarm, but should. details: {err}"
+        logger.error(f"Not found alarm, but should. details: {err}")
         await send_error_message(callback)
     else:
         try:

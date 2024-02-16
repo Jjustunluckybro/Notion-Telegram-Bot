@@ -59,7 +59,7 @@ async def delete_note(
 
 
 @handel_storage_unexpected_response
-@router.callback_query(lambda x: x.data.startswith(Callbacks.YES))
+@router.callback_query(lambda x: x.data.startswith(Callbacks.YES), DeleteNote.accept)
 @async_method_arguments_logger(logger)
 async def delete_note_yes(
         callback: types.CallbackQuery,
@@ -111,7 +111,7 @@ async def delete_note_yes(
 
 
 @handel_storage_unexpected_response
-@router.callback_query(lambda x: x.data.startswith(Callbacks.NO))
+@router.callback_query(lambda x: x.data.startswith(Callbacks.NO), DeleteNote.accept)
 @async_method_arguments_logger(logger)
 async def delete_note_no(
         callback: types.CallbackQuery,
