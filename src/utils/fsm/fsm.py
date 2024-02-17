@@ -1,6 +1,7 @@
 from aiogram.fsm.state import StatesGroup, State
 
 
+#  Themes FSM
 class CreateThemeFSM(StatesGroup):
     """While user delete"""
     write_name: State = State()
@@ -8,6 +9,11 @@ class CreateThemeFSM(StatesGroup):
     accept: State = State()
 
 
+class DeleteTheme(StatesGroup):
+    accept: State = State()
+
+
+#  Notes FSM
 class CreateNote(StatesGroup):
     write_name: State = State()
     write_text: State = State()
@@ -16,6 +22,11 @@ class CreateNote(StatesGroup):
     accept: State = State()
 
 
+class DeleteNote(StatesGroup):
+    accept: State = State()
+
+
+#  Alarms FSM
 class CreateAlarm(StatesGroup):
     write_name: State = State()
     write_description: State = State()
@@ -26,9 +37,16 @@ class CreateAlarm(StatesGroup):
     accept: State = State()
 
 
-class DeleteTheme(StatesGroup):
+class SetNewAlarmRepeatInterval(StatesGroup):
+    write_time: State = State()
     accept: State = State()
 
 
-class DeleteNote(StatesGroup):
+class SetNewAlarmTime(StatesGroup):
+    write_next_notion_date: State = State()
+    write_next_notion_time: State = State()
+    accept: State = State()
+
+
+class DeleteAlarm(StatesGroup):
     accept: State = State()

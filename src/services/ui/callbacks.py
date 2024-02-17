@@ -20,11 +20,16 @@ class Callbacks:
 
     OPEN_THEME_START_WITH: Final[str] = "open_theme_"
     OPEN_NOTE_START_WITH: Final[str] = "open_note_"
-    OPEN_ALARM_START_WITH: Final[str] = "open_theme_"
+    OPEN_ALARM_START_WITH: Final[str] = "open_alarm_"
 
     DELETE_THEME_START_WITH: Final[str] = "delete_theme_"
     DELETE_NOTE_START_WITH: Final[str] = "delete_note_"
     DELETE_ALARM_START_WITH: Final[str] = "delete_alarm_"
+
+    SET_NEW_ALARM_TIME: Final[str] = "set_new_alarm_time"
+    FINISH_ALARM: Final[str] = "finish_alarm"
+    CHANGE_ALARM_REPEATABLE: Final[str] = "change_alarm_repeatable"
+    SET_ALARM_NEW_REPEAT_INTERVAL: Final[str] = "set_alarm_new_repeat_interval"
 
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
 
@@ -35,6 +40,14 @@ class Callbacks:
 
     YES: Final[str] = "yes"
     NO: Final[str] = "no"
+
+    @staticmethod
+    def add_id_to_callback_string(callback_string: str, entity_id: str) -> str:
+        return f"{callback_string}_{entity_id}"
+
+    @staticmethod
+    def get_id_from_callback(callback: str) -> str:
+        return callback.split("_")[-1]
 
     def get_open_theme_callback(self, theme_id: str) -> str:
         return f"{self.OPEN_THEME_START_WITH}{theme_id}"
@@ -59,7 +72,3 @@ class Callbacks:
 
     def get_create_new_alarm_callback(self, note_id: str) -> str:
         return f"{self.CREATE_ALARM}{note_id}"
-
-    @staticmethod
-    def get_id_from_callback(callback: str) -> str:
-        return callback.split("_")[-1]

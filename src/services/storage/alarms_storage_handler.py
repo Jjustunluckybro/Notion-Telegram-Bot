@@ -141,7 +141,7 @@ class AlarmsStoragehandler(IAlarmsStoragehandler):
                 self.logger.error(f"Unacceptable response status code: {response.status}")
                 raise UnexpectedResponse(f"Unacceptable response status code: {response.status}")
 
-    async def path(self, _id: str, new_data: dict[str, Any]) -> None:
+    async def patch(self, _id: str, new_data: dict[str, Any]) -> None:
         response = await self.request_handler.patch(f"alarms/update_alarm/{_id}", body=new_data)
 
         match response.status:

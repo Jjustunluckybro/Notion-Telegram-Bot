@@ -185,7 +185,7 @@ class IAlarmsStoragehandler(IStorageRequestHandler, ABC):
         ...
 
     @abstractmethod
-    async def path(self, _id: str, new_data: dict[str, Any]) -> None:
+    async def patch(self, _id: str, new_data: dict[str, Any]) -> None:
         """Update alarm in the storage"""
         ...
 
