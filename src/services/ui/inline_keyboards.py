@@ -107,7 +107,7 @@ def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
     if alarm.is_repeatable:
         builder.button(
             text="Отключить повторение напоминания",
-            callback_data=callbacks.add_id_to_callback_string(callbacks.SET_ALARM_NOT_REPEATABLE, alarm.id)
+            callback_data=callbacks.add_id_to_callback_string(callbacks.CHANGE_ALARM_REPEATABLE, alarm.id)
         )
         builder.button(
             text="Задать новый интервал повторения",
@@ -116,7 +116,7 @@ def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
     else:
         builder.button(
             text="Сделать напоминание повторяющимся",
-            callback_data=callbacks.add_id_to_callback_string(callbacks.SET_ALARM_REPEATABLE, alarm.id)
+            callback_data=callbacks.add_id_to_callback_string(callbacks.CHANGE_ALARM_REPEATABLE, alarm.id)
         )
 
     if alarm.status == AlarmStatus.QUEUE:

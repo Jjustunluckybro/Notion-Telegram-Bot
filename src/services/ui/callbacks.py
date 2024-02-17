@@ -28,8 +28,7 @@ class Callbacks:
 
     SET_NEW_ALARM_TIME: Final[str] = "set_new_alarm_time"
     FINISH_ALARM: Final[str] = "finish_alarm"
-    SET_ALARM_REPEATABLE: Final[str] = "set_alarm_repeatable"
-    SET_ALARM_NOT_REPEATABLE: Final[str] = "set_alarm_not_repeatable"
+    CHANGE_ALARM_REPEATABLE: Final[str] = "change_alarm_repeatable"
     SET_ALARM_NEW_REPEAT_INTERVAL: Final[str] = "set_alarm_new_repeat_interval"
 
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"

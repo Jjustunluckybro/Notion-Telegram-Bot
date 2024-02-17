@@ -83,38 +83,3 @@ async def finish_alarm(
             )
     finally:
         await callback.message.delete()
-
-
-@router.callback_query(lambda x: x.data.startswith(Callbacks.SET_ALARM_NOT_REPEATABLE))
-@handel_storage_unexpected_response
-@async_method_arguments_logger(logger)
-async def set_alarm_not_repeatable(
-        callback: types.CallbackQuery,
-        alarms_storage: IAlarmsStoragehandler = AlarmsStoragehandler()
-) -> None:
-    alarm_id = Callbacks.get_id_from_callback(callback.data)
-
-    try:
-        await alarms_storage.patch(alarm_id, {"is_repeatable": False})
-    except StorageValidationError:
-        await send_error_message(callback)
-    except StorageNotFound as err:
-        logger.error(f"Not found alarm, but should. details: {err}")
-        await send_error_message(callback)
-    else:
-        try:
-            alarm = await alarms_storage.get(alarm_id)
-        except StorageValidationError:
-            await send_error_message(callback)
-        except StorageNotFound as err:
-            logger.error(f"Not found alarm, but should. details: {err}")
-            await send_error_message(callback)
-        else:
-            kb = create_alarm_menu_kb(alarm)
-            await callback.bot.send_message(
-                text=get_alarm_menu_script(alarm),
-                chat_id=callback.from_user.id,
-                reply_markup=kb.as_markup()
-            )
-    finally:
-        await callback.message.delete()
