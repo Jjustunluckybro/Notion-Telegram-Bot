@@ -6,6 +6,7 @@ from aiogram import Router, types
 from aiogram.fsm.context import FSMContext
 from aiogram_calendar import SimpleCalendar, get_user_locale, SimpleCalendarCallback
 
+from src.models.alarm_model import AlarmStatus
 from src.services.storage.alarms_storage_handler import AlarmsStoragehandler
 from src.services.storage.interfaces import IAlarmsStoragehandler
 from src.services.ui.callbacks import Callbacks
@@ -122,7 +123,13 @@ async def save_new_alarm_time(
         "%d/%m/%Y %H:%M"
     )
     try:
-        await alarm_storage.patch(alarm_id, {"times.next_notion_time": str(next_notion)})
+        await alarm_storage.patch(
+            alarm_id,
+            {
+                "times.next_notion_time": str(next_notion),
+                "status": AlarmStatus.QUEUE
+            }
+        )
         alarm = await alarm_storage.get(alarm_id)
     except StorageValidationError or StorageNotFound as err:
         if isinstance(err, StorageNotFound):
