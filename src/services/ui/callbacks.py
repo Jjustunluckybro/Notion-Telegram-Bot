@@ -11,14 +11,16 @@ class Callbacks:
     OPEN_MAIN_MENU: Final[str] = "main_menu"
 
     OPEN_ALL_THEMES: Final[str] = "open_all_themes"
+    CREATE_THEME: Final[str] = "create_theme_"
+    OPEN_THEME_START_WITH: Final[str] = "open_theme_"
+    CHANGE_THEME: Final[str] = "change_theme"
+
     OPEN_ALL_THEME_NOTES: Final[str] = "open_all_theme_notes"
     OPEN_ALL_NOTE_ALARMS: Final[str] = "open_all_note_alarms"
 
-    CREATE_THEME: Final[str] = "create_theme_"
     CREATE_NOTE: Final[str] = "create_note_"
     CREATE_ALARM: Final[str] = "create_alarm_"
 
-    OPEN_THEME_START_WITH: Final[str] = "open_theme_"
     OPEN_NOTE_START_WITH: Final[str] = "open_note_"
     OPEN_ALARM_START_WITH: Final[str] = "open_alarm_"
 
@@ -34,9 +36,13 @@ class Callbacks:
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
 
     SAVE: Final[str] = "save"
+    BACK: Final[str] = "back"
 
     ADD_ATTACHMENTS: Final[str] = "add_attachment"
     ADD_CHECKPOINT: Final[str] = "add_checkpoint"
+
+    CHANGE_NAME: Final[str] = "change_name"
+    CHANGE_DESCRIPTION: Final[str] = "change_description"
 
     YES: Final[str] = "yes"
     NO: Final[str] = "no"

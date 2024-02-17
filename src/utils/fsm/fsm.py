@@ -9,6 +9,13 @@ class CreateThemeFSM(StatesGroup):
     accept: State = State()
 
 
+class ChangeTheme(StatesGroup):
+    change_theme: State = State()
+    change_name: State = State()
+    change_description: State = State()
+    accept: State = State()
+
+
 class DeleteTheme(StatesGroup):
     accept: State = State()
 
