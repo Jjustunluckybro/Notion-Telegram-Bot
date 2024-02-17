@@ -46,3 +46,7 @@ class SetNewAlarmTime(StatesGroup):
     write_next_notion_date: State = State()
     write_next_notion_time: State = State()
     accept: State = State()
+
+
+class DeleteAlarm(StatesGroup):
+    accept: State = State()
