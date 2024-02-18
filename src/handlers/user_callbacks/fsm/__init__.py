@@ -1,6 +1,7 @@
 from aiogram import Router
 
 from src.handlers.user_callbacks.fsm.create_theme import router as create_theme_router
+from src.handlers.user_callbacks.fsm.change_theme import router as change_theme_router
 from src.handlers.user_callbacks.fsm.create_note import router as create_note_router
 from src.handlers.user_callbacks.fsm.create_alarm import router as create_alarm_router
 from src.handlers.user_callbacks.fsm.delete_theme import router as delete_theme_router
@@ -23,7 +24,8 @@ def get_fsm_router() -> Router:
         set_alarm_new_repeat_interval_router,
         set_alarm_repeatable_router,
         set_new_alarm_time_router,
-        delete_alarm_router
+        delete_alarm_router,
+        change_theme_router
     )
 
     return router
