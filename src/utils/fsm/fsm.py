@@ -29,6 +29,12 @@ class CreateNote(StatesGroup):
     accept: State = State()
 
 
+class ChangeNote(StatesGroup):
+    change_note: State = State()
+    change_name: State = State()
+    change_description: State = State()
+
+
 class DeleteNote(StatesGroup):
     accept: State = State()
 
@@ -53,6 +59,12 @@ class SetNewAlarmTime(StatesGroup):
     write_next_notion_date: State = State()
     write_next_notion_time: State = State()
     accept: State = State()
+
+
+class ChangeAlarm(StatesGroup):
+    change_alarm: State = State()
+    change_name: State = State()
+    change_description: State = State()
 
 
 class DeleteAlarm(StatesGroup):

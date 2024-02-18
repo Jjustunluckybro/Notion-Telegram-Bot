@@ -83,7 +83,7 @@ def create_theme_menu_kb(theme_id: str, theme_notes: list[NoteModel] | None) -> 
     return builder
 
 
-def create_change_theme_kb() -> InlineKeyboardBuilder:
+def create_change_name_or_description_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Изменить имя", callback_data=Callbacks.CHANGE_NAME)
     builder.button(text="Изменить описание", callback_data=Callbacks.CHANGE_DESCRIPTION)
@@ -103,6 +103,8 @@ def create_note_menu_kb(note_id: str, parent_theme_id: str,
             builder.button(text=alarm.name, callback_data=callbacks.get_open_alarm_callback(alarm.id))
 
     builder.button(text="Создать новое напоминание", callback_data=callbacks.get_create_new_alarm_callback(note_id))
+    builder.button(text="Изменить заметку",
+                   callback_data=callbacks.add_id_to_callback_string(callbacks.CHANGE_NOTE, note_id))
     builder.button(text="Удалить текущую заметку", callback_data=callbacks.get_delete_note_callback(note_id))
     builder.button(text=f"Назад к теме", callback_data=callbacks.get_open_theme_callback(parent_theme_id))
     builder.adjust(1)

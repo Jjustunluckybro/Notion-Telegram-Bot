@@ -19,19 +19,20 @@ class Callbacks:
     OPEN_ALL_NOTE_ALARMS: Final[str] = "open_all_note_alarms"
 
     CREATE_NOTE: Final[str] = "create_note_"
-    CREATE_ALARM: Final[str] = "create_alarm_"
-
+    CHANGE_NOTE: Final[str] = "change_note"
     OPEN_NOTE_START_WITH: Final[str] = "open_note_"
     OPEN_ALARM_START_WITH: Final[str] = "open_alarm_"
 
     DELETE_THEME_START_WITH: Final[str] = "delete_theme_"
     DELETE_NOTE_START_WITH: Final[str] = "delete_note_"
-    DELETE_ALARM_START_WITH: Final[str] = "delete_alarm_"
 
+    CREATE_ALARM: Final[str] = "create_alarm_"
+    CHANGE_ALARM: Final[str] = "change_alarm"
     SET_NEW_ALARM_TIME: Final[str] = "set_new_alarm_time"
     FINISH_ALARM: Final[str] = "finish_alarm"
     CHANGE_ALARM_REPEATABLE: Final[str] = "change_alarm_repeatable"
     SET_ALARM_NEW_REPEAT_INTERVAL: Final[str] = "set_alarm_new_repeat_interval"
+    DELETE_ALARM_START_WITH: Final[str] = "delete_alarm_"
 
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
 
