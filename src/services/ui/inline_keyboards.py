@@ -87,7 +87,7 @@ def create_change_theme_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Изменить имя", callback_data=Callbacks.CHANGE_NAME)
     builder.button(text="Изменить описание", callback_data=Callbacks.CHANGE_DESCRIPTION)
-    builder.button(text="Назад", callback_data=Callbacks.BACK)
+    builder.button(text="Отмена", callback_data=Callbacks.CANCEL)
     builder.adjust(1)
     return builder
 
