@@ -1,6 +1,7 @@
 from typing import Any
 
 from src.models.alarm_model import AlarmModel, AlarmStatus
+from src.models.notes_models import NoteModel
 from src.models.themes_modles import ThemeModel
 
 
@@ -23,5 +24,16 @@ def get_change_theme_accept_script(user_data: dict[str, Any]) -> str:
         text += f"\nИмя:\n'{theme.name}' -> '{user_data.get('new_name')}'"
     if user_data.get("new_description") is not None:
         text += f"\nОписание:\n'{theme.description}' -> '{user_data.get('new_description')}'"
+    text += "\n\nВыберите что изменить или сохраните изменения"
+    return text
+
+
+def get_change_note_accept_script(user_data: dict[str, Any]) -> str:
+    note: NoteModel = user_data["note"]
+    text = "Изменения:"
+    if user_data.get("new_name") is not None:
+        text += f"\nИмя:\n'{note.name}' -> '{user_data.get('new_name')}'"
+    if user_data.get("new_description") is not None:
+        text += f"\nОписание:\n'{note.data.text}' -> '{user_data.get('new_description')}'"
     text += "\n\nВыберите что изменить или сохраните изменения"
     return text
