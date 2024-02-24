@@ -37,3 +37,14 @@ def get_change_note_accept_script(user_data: dict[str, Any]) -> str:
         text += f"\nОписание:\n'{note.data.text}' -> '{user_data.get('new_description')}'"
     text += "\n\nВыберите что изменить или сохраните изменения"
     return text
+
+
+def get_change_alarm_accept_script(user_data: dict[str, Any]) -> str:
+    alarm: AlarmModel = user_data["alarm"]
+    text = "Изменения:"
+    if user_data.get("new_name") is not None:
+        text += f"\nИмя:\n'{alarm.name}' -> '{user_data.get('new_name')}'"
+    if user_data.get("new_description") is not None:
+        text += f"\nОписание:\n'{alarm.description}' -> '{user_data.get('new_description')}'"
+    text += "\n\nВыберите что изменить или сохраните изменения"
+    return text

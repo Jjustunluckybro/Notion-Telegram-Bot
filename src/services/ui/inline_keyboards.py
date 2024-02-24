@@ -41,7 +41,6 @@ def create_main_menu_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Открыть список тем", callback_data=Callbacks.OPEN_ALL_THEMES)
     builder.button(text="Создать новую тему", callback_data=Callbacks.CREATE_THEME)
-    builder.button(text="Создать новое напоминание", callback_data=Callbacks.CREATE_ALARM)
     builder.adjust(1)
     return builder
 
@@ -140,6 +139,8 @@ def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
             callback_data=callbacks.add_id_to_callback_string(callbacks.FINISH_ALARM, alarm.id)
         )
 
+    builder.button(text="Изменить напоминание",
+                   callback_data=Callbacks.add_id_to_callback_string(callbacks.CHANGE_ALARM, alarm.id))
     builder.button(text="Удалить напоминание", callback_data=callbacks.get_delete_alarm_note_callback(alarm.id))
     builder.button(text="Вернуться к заметке", callback_data=callbacks.get_open_note_callback(alarm.links.parent_id))
     builder.button(text="Назад в меню", callback_data=Callbacks.OPEN_MAIN_MENU)
