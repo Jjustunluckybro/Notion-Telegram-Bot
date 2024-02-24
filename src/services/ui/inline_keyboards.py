@@ -148,6 +148,29 @@ def create_alarm_menu_kb(alarm: AlarmModel) -> InlineKeyboardBuilder:
     return builder
 
 
+def create_sent_alarm_kb(alarm_id: str, is_repeatable: bool) -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    callbacks = Callbacks()
+
+    builder.button(text="Открыть напоминание", callback_data=callbacks.get_open_alarm_callback(alarm_id))
+    # if not is_repeatable:  TODO
+    #     builder.button(text="Отложить напоминание",
+    #                    callback_data=callbacks.add_id_to_callback_string(callbacks.POSTPONE_ALARM, alarm_id))
+
+    builder.button(text="Закртыть окно напоминания", callback_data=callbacks.CLOSE_MESSAGE)
+    builder.button(text="Удалить напоминание", callback_data=callbacks.get_delete_alarm_note_callback(alarm_id))
+    builder.adjust(1)
+    return builder
+
+
+def create_postpone_alarm_kb(is_repeatable: bool) -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    callbacks = Callbacks()
+    if is_repeatable:
+        builder.button("")
+    return builder
+
+
 def create_save_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Сохранить", callback_data=Callbacks.SAVE)
