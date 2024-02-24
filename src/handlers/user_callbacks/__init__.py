@@ -4,6 +4,7 @@ from src.handlers.user_callbacks.fsm import get_fsm_router
 from src.handlers.user_callbacks.notes_callbacks import router as note_router
 from src.handlers.user_callbacks.themes_callbacks import router as themes_router
 from src.handlers.user_callbacks.alarms import router as alarms_router
+from src.handlers.user_callbacks.common import router as common_router
 
 
 def get_user_callbacks_router() -> Router:
@@ -12,7 +13,8 @@ def get_user_callbacks_router() -> Router:
         get_fsm_router(),
         themes_router,
         note_router,
-        alarms_router
+        alarms_router,
+        common_router
     )
 
     return router

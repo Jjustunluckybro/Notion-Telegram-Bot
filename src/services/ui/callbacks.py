@@ -33,6 +33,7 @@ class Callbacks:
     CHANGE_ALARM_REPEATABLE: Final[str] = "change_alarm_repeatable"
     SET_ALARM_NEW_REPEAT_INTERVAL: Final[str] = "set_alarm_new_repeat_interval"
     DELETE_ALARM_START_WITH: Final[str] = "delete_alarm_"
+    POSTPONE_ALARM: Final[str] = "postpone_alarm"
 
     CHANGE_FSM_USER_DATA: Final[str] = "change_fsm_user_data"
 
@@ -47,6 +48,8 @@ class Callbacks:
 
     YES: Final[str] = "yes"
     NO: Final[str] = "no"
+
+    CLOSE_MESSAGE: Final[str] = "close_message"
 
     @staticmethod
     def add_id_to_callback_string(callback_string: str, entity_id: str) -> str:
