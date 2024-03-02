@@ -6,7 +6,7 @@ from logging import getLogger
 from aiogram import Router, types
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram_calendar import SimpleCalendar, get_user_locale, SimpleCalendarCallback
+from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback
 from pydantic import ValidationError
 
 from src.models.alarm_model import AlarmModelToCreate
@@ -86,7 +86,7 @@ async def create_alarm_write_next_notion_date(
     date: datetime
 
     calendar = SimpleCalendar(
-        locale=await get_user_locale(callback.from_user), show_alerts=True
+        locale=None, show_alerts=True
     )
     calendar.set_dates_range(
         datetime.now() - timedelta(days=1),
