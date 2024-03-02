@@ -13,7 +13,7 @@ from src.models.alarm_model import AlarmModelToCreate
 from src.services.storage.alarms_storage_handler import AlarmsStoragehandler
 from src.services.storage.interfaces import IAlarmsStoragehandler
 from src.services.ui.callbacks import Callbacks
-from src.services.ui.inline_keyboards import create_cancel_fsm_kb, create_yes_no_keyboard, create_done_kb, \
+from src.services.ui.inline_keyboards import create_cancel_fsm_kb, create_yes_no_keyboard, \
     create_change_fsm_user_data_kb, create_save_kb, create_main_menu_kb
 from src.utils.fsm.fsm import CreateAlarm
 from src.utils.handlers_utils import del_prev_message_and_write_current_message_as_prev
@@ -66,7 +66,7 @@ async def create_alarm_write_description(message: types.Message, state: FSMConte
         \nОписание напоминания: {user_data.get('alarm_description')}
         \nВыберете дату напоминания
         """,
-        reply_markup=await SimpleCalendar(locale=await get_user_locale(message.from_user)).start_calendar()
+        reply_markup=await SimpleCalendar(locale=None).start_calendar()
     )
 
     await message.delete()
@@ -248,7 +248,6 @@ async def create_alarm_save(
         }
         repeat_interval = user_data["repeat_interval"]
         next_notion_time = user_data["next_notion"]
-
         await sh.create(
             alarm=AlarmModelToCreate.model_validate(alarm),
             repeat_interval=repeat_interval,

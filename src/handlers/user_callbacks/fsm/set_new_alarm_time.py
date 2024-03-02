@@ -4,7 +4,7 @@ import re
 
 from aiogram import Router, types
 from aiogram.fsm.context import FSMContext
-from aiogram_calendar import SimpleCalendar, get_user_locale, SimpleCalendarCallback
+from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback
 
 from src.models.alarm_model import AlarmStatus
 from src.services.storage.alarms_storage_handler import AlarmsStoragehandler
@@ -35,7 +35,7 @@ async def set_new_alarm_time(
 
     msg = await callback.message.answer(
         text="Выберете дату напоминания",
-        reply_markup=await SimpleCalendar(locale=await get_user_locale(callback.from_user)).start_calendar()
+        reply_markup=await SimpleCalendar(locale=None).start_calendar()
     )
     await del_prev_message_and_write_current_message_as_prev(callback, state, msg.message_id)
     await callback.message.delete()
@@ -50,7 +50,7 @@ async def set_new_alarm_time_write_date(
 ) -> None:
     """"""
     calendar = SimpleCalendar(
-        locale=await get_user_locale(callback.from_user), show_alerts=True
+        locale=None, show_alerts=True
     )
     calendar.set_dates_range(
         datetime.now() - timedelta(days=1),
