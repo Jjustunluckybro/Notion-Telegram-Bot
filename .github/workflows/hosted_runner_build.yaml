@@ -33,4 +33,4 @@ jobs:
           BACKEND_USER_LOGIN: ${{ secrets.BACKEND_USER_LOGIN }}
           BACKEND_USER_PASSWORD: ${{ secrets.BACKEND_USER_PASSWORD }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: docker run -d -p 87:80  --restart always --name alarm-bot-tg-client --env BACKEND_HOST=BACKEND_HOST --env BACKEND_USER_LOGIN=BACKEND_USER_LOGIN --env BACKEND_USER_PASSWORD=BACKEND_USER_PASSWORD --env BOT_TOKEN=BOT_TOKEN alarm-bot-tg-client
+        run: docker run -d -p 87:80  --restart always --name alarm-bot-tg-client --env BACKEND_HOST=$BACKEND_HOST --env BACKEND_USER_LOGIN=$BACKEND_USER_LOGIN --env BACKEND_USER_PASSWORD=$BACKEND_USER_PASSWORD --env BOT_TOKEN=$BOT_TOKEN alarm-bot-tg-client
