@@ -5,8 +5,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 
 from src.services.scheduler.scheduler import create_and_start_scheduler
-from utils import config
-from handlers.router import get_main_router
+from src.utils import config
+from src.handlers.router import get_main_router
 
 logger = logging.getLogger('app.main')
 
