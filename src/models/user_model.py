@@ -6,5 +6,6 @@ class UserModel(BaseModel):
     telegram_id: str
     user_name: str
     lang_code: str  # user language code
+    timezone: int
     first_name: str | None
     last_name: str | None
