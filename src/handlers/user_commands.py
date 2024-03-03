@@ -28,6 +28,7 @@ async def start(msg: types.Message, sh: IUserStorageHandler = UserStorageHandler
             telegram_id=user_id,
             user_name=msg.from_user.username,
             lang_code=msg.from_user.language_code,
+            timezone=3,
             first_name=msg.from_user.first_name,
             last_name=msg.from_user.last_name
         )
@@ -37,13 +38,13 @@ async def start(msg: types.Message, sh: IUserStorageHandler = UserStorageHandler
         await msg.answer(text="Тут текст приветствия и главного меню", reply_markup=kb.as_markup())
 
 
-async def test(msg: types.Message, storage: IThemesStorageHandler = ThemesStorageHandler()) -> None:  # TODO
-    """Only for dev"""
-    logger.info(f"start handling 'start' event from user: {msg.from_user.id}")
-    await msg.answer(
-        "Please select a date: ",
-        reply_markup=await SimpleCalendar(locale=await get_user_locale(msg.from_user)).start_calendar()
-    )
+# async def test(msg: types.Message, storage: IThemesStorageHandler = ThemesStorageHandler()) -> None:
+#     """Only for dev"""
+#     logger.info(f"start handling 'start' event from user: {msg.from_user.id}")
+#     await msg.answer(
+#         "Please select a date: ",
+#         reply_markup=await SimpleCalendar(locale=await get_user_locale(msg.from_user)).start_calendar()
+#     )
 
 
 async def process_simple_calendar(callback_query: types.CallbackQuery, callback_data: SimpleCalendarCallback):
