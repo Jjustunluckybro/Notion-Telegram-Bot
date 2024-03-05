@@ -55,6 +55,6 @@ async def job_check_active_alarms(
             await send_alarm_to_user(alarm, bot)
             logger.info(f"Successful sent alarm with id: {alarm.id}")
             if alarm.is_repeatable:
-                await alarms_storage.update_status(alarm.id, AlarmStatus.QUEUE.value)
+                await alarms_storage.postpone_repeatable(alarm.id)
             else:
                 await alarms_storage.update_status(alarm.id, AlarmStatus.FINISH.value)
