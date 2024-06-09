@@ -1,36 +1,27 @@
-<h1>Сервис напоминаний</h1>
+<h1>Телеграам бот - Сервис напоминаний</h1>
 
 <h2>Описание</h2>
-Сервис для взаимодействия с базой данных, которая хранит в себе всю информацию о пользователях как приложения и их напоминаниях.
-Предоставляет REST API для взаимодействия с клиентом.
 
-[Пример телеграм бот клиента](https://github.com/Jjustunluckybro/Notion-Telegram-Bot)
+Телеграм бот заметок и напоминаний. Данный бот является ui частью приложения напоминаний, использующий сервис напоминаний через API 
 
-
-<h3>Особенности</h3>
-
-1. В текущей реализации используется MongoDB, развернутая на отдельном сервере. Для взаимодействия с ней, используется библиотека [motor](https://pypi.org/project/motor). Возможно поменять бд на любую другую, для интеграции другой бд необходимо ревлизовать интерфейс `IDataBase` найти его можно по пути: `src -> services -> database -> interface.py`
-2. Взаимодействие с API возможно только через полинг.
-3. Для актуализации данных в бд по напоминаниям импользуется шедулер, который каждые n едениц времени проверяет, готово ли напоминание к отправке пользователю
-4. Аутентификация происходит с помощью jwt токена, генерирующегося на стороне сервера. Токен сам необбновляется, после его протухания необходимо заного пройти идентефикацию.
+[Сервис напоминаний](https://github.com/Jjustunluckybro/NotionServer)
 
 <h2>Запуск в докер контейнере</h2>
 
 1. Создать контейнр
 ```commandline
-docker build -t alarm-bot-server .
+docker build -t alarm-bot-tg-client .
 ```
 2. Запустить контейнер, прокинув необходимые переменные окружения (см. `.env-example`)
 ```commandline
-docker run -d -p 80:8000
+docker run -d -p 87:80
   --restart always 
-  --name alarm-bot-server 
-  --env APP_HOST=$APP_HOST 
-  --env APP_PORT=$APP_PORT 
-  --env DB_USER_PASSWORD=$DB_USER_PASSWORD 
-  --env JWT_SECRET=$JWT_SECRET 
-  --env VERIFICATION_TOKEN_SECRET=$VERIFICATION_TOKEN_SECRET 
-  alarm-bot-server
+  --name alarm-bot-tg-client
+  --env BACKEND_HOST=$BACKEND_HOST
+  --env BACKEND_USER_LOGIN=$BACKEND_USER_LOGIN
+  --env BACKEND_USER_PASSWORD=$BACKEND_USER_PASSWORD
+  --env BOT_TOKEN=$BOT_TOKEN 
+  alarm-bot-tg-client
 ```
 
 <h2>Файловая структура проекта</h2>
@@ -39,26 +30,23 @@ docker run -d -p 80:8000
 - .github
     - workflows // ci/cd конфиги для github actions
 - src
-    - core
-        - modles // Модели данных
-    - infrastructure  // Дпоплнительные слой бизнес-логики для походов в бд из роутеров
-        - alarms        
-        - notes         
-        - themes       
-        - users        
-        - exceptions.py
+    - handlers  // Все ручки для взаимодействия с ботом со стороны пользователя бота
+        - user_callbacks  // Все ручки, которые используют inline клавиатуру
+            - fsm  // Ручки использующие inline клавиатуру и логику состояний, для проведения пользователя по конкретному сценарию
+    - models  // Модели данных
     - services
-        - auth      // Модуль с логикой аутентификации/авторизации пользователей API
-        - database  // Модуль с взаимодействием с бд
-        - jobs      // Вспомогательнеы джобы, запускаемые в шедулере
-        - routers   // API ручки
-        - test      // Тесты
+        - requests // Логика для асинхронных http запросов
+        - scheduler
+            - jobs         // Джобы запускаемые в шедулере
+            - scheduler.py // Шедулер
+        - storage // Логика для взаимодействия с API хранилища данных в лице приложения 'Сервис напоминаний'
+        - ui      // UI элементы телеграм бота
     - utils
-        - config.py   // Конфиг с переменными окружения
-        - dependes.py // Зависимости для роутеров
-    - app_main  // Точка входа в приложение
-- .env-example  // Пример переменных окружения, неообюходимых для работы приложения
-- Dockerfile
-- pyproject.toml   
-- requirmensts.txt 
+        - exceptions         // Кастомные исключения, используемые в приложении
+        - fsm                // Машины состояний используемые в приложении
+        - config.py          // Модуль с переменными окружения
+        - handler_utils.py   // Доп. функции используемые в ручках взаимодействия с ботом
+        - request_methods.py // Методы http запросов для сервиса ассинхронных запросов
+        - statuses.py        // Статусы http ответов
+    - main.py  // Точка входа при запуске приложения
 ```
